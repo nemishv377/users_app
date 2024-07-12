@@ -1,0 +1,119 @@
+<%= form_with(model: user, class: "contents") do |form| %>
+
+  <div class="my-5">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <% user.errors.full_messages_for(:first_name).each do |message| %>
+      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <% user.errors.full_messages_for(:last_name).each do |message| %>
+      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :email %>
+    <%= form.text_field :email, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <% user.errors.full_messages_for(:email).each do |message| %>
+      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :gender %>
+    <%= form.radio_button :gender, "male" %>
+    <%= form.label :gender_male, "Male" %>
+    <%= form.radio_button :gender, "female" %>
+    <%= form.label :gender_female, "Female" %>
+    <%= form.radio_button :gender, "other" %>
+    <%= form.label :gender_other, "Other" %>
+    <% user.errors.full_messages_for(:gender).each do |message| %>
+      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :hobbies %> 
+    <%= form.check_box :hobbies, { multiple: true }, "reading", nil  %> 
+    <%= form.label :hobbies_reading, "Reading" %> 
+    <%= form.check_box :hobbies, { multiple: true }, "travelling", nil %>  
+    <%= form.label :hobbies_travelling, "Travelling" %> 
+    <%= form.check_box :hobbies, { multiple: true }, "photography", nil %> 
+    <%= form.label :hobbies_photography, "Photography" %> 
+    <% user.errors.full_messages_for(:hobbies).each do |message| %>
+      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+    <% end %>
+ 
+
+  </div>
+
+
+
+    <div class="my-5">
+      <%= form.label :state_id %>
+
+      <%= form.select :state_id, State.all.pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    </div>
+
+    
+    <div class="my-5">
+      <%= form.label :city_id %>
+      <%= form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+
+    </div>
+
+  
+
+  <div class="inline">
+    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>
+
+
+
+<script>
+  
+  let state = document.getElementById("user_state_id");
+  let city = document.getElementById("user_city_id");
+
+  const stateId = state.value;
+  set_city(stateId);
+
+  state.addEventListener('change', (event) => {
+    const stateId = event.target.value;
+    set_city(stateId);
+
+  });
+  
+  function set_city(state_id)
+  {
+    city_str ='<option value="">Select a city</option>';
+
+    if (state_id) {
+
+      console.log(state_id)
+      fetch(`/states/${state_id}/cities`)
+        .then(response => response.json())
+        .then(cities => {
+          cities.forEach(city => {
+            city_str = city_str + `<option value="${city.id}">${city.name}</option>`
+            const option = document.createElement('option');
+            option.value = city.id;
+            option.textContent = city.name;
+            console.log(option)
+            
+          });
+          console.log(city_str)
+          city.innerHTML = city_str
+        });
+      }
+  }
+
+  
+
+</script>
