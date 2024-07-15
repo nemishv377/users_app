@@ -1,44 +1,52 @@
+
 <%= form_with(model: user, class: "contents") do |form| %>
 
   <div class="my-5">
-    <%= form.label :first_name %>
+    <%= form.label :first_name %> <sup>*</sup>
     <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:first_name).each do |message| %>
       <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <% break %>
+      
     <% end %>
   </div>
 
   <div class="my-5">
-    <%= form.label :last_name %>
+    <%= form.label :last_name %> <sup>*</sup>
     <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:last_name).each do |message| %>
       <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <% break %>
     <% end %>
   </div>
 
   <div class="my-5">
-    <%= form.label :email %>
+    <%= form.label :email %> <sup>*</sup>
     <%= form.text_field :email, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:email).each do |message| %>
       <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <% break %>
     <% end %>
   </div>
 
   <div class="my-5">
-    <%= form.label :gender %>
+    <div>
+    Gender<sup>*</sup>
     <%= form.radio_button :gender, "male" %>
     <%= form.label :gender_male, "Male" %>
     <%= form.radio_button :gender, "female" %>
     <%= form.label :gender_female, "Female" %>
     <%= form.radio_button :gender, "other" %>
     <%= form.label :gender_other, "Other" %>
+    </div>
     <% user.errors.full_messages_for(:gender).each do |message| %>
       <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+       <% break %>
     <% end %>
   </div>
 
   <div class="my-5">
-    <%= form.label :hobbies %> 
+    Hobbies<sup>*</sup>
     <%= form.check_box :hobbies, { multiple: true }, "reading", nil  %> 
     <%= form.label :hobbies_reading, "Reading" %> 
     <%= form.check_box :hobbies, { multiple: true }, "travelling", nil %>  
@@ -47,27 +55,35 @@
     <%= form.label :hobbies_photography, "Photography" %> 
     <% user.errors.full_messages_for(:hobbies).each do |message| %>
       <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <% break %>
     <% end %>
  
-
   </div>
 
 
+  <div class="my-5">
+    <%= form.label :state_id %><sup>*</sup>
+    <%= form.select :state_id, State.all.pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <% user.errors.full_messages_for(:state).each do |message| %>
+      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <% break %>
+    <% end %>
+  </div>
 
-    <div class="my-5">
-      <%= form.label :state_id %>
+  <div class="my-5">
+    <%= form.label :city_id %><sup>*</sup>
+    <%= form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <% user.errors.full_messages_for(:city).each do |message| %>
+      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <% break %>
+    <% end %>
+  </div>
 
-      <%= form.select :state_id, State.all.pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    </div>
-
+  <div class="my-5">
+    <%= form.label "upload file" %>
+    <%= form.file_field "upload file" , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     
-    <div class="my-5">
-      <%= form.label :city_id %>
-      <%= form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-
-    </div>
-
-  
+  </div>
 
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
@@ -80,40 +96,53 @@
   
   let state = document.getElementById("user_state_id");
   let city = document.getElementById("user_city_id");
-
-  const stateId = state.value;
-  set_city(stateId);
-
+  var current_user = <%= raw user.to_json %>;
+  
+  if (state.value>0)
+    set_city(state.value, current_user.city_id);
+  
   state.addEventListener('change', (event) => {
     const stateId = event.target.value;
-    set_city(stateId);
+    var user = <%= raw user.to_json %>;
 
+    if (stateId>0)
+      set_city(stateId,user.city_id);
+    else{
+      city.innerHTML = '<option value="" read-only >Select a City</option>'
+      console.log(city.value)
+    }
+    city.value = user.city_id
+    console.log(user.city_id)
   });
   
-  function set_city(state_id)
+  // ========================= set city =============================
+  function set_city(state_id,selected_city)
   {
-    city_str ='<option value="">Select a city</option>';
-
+    city_str = '<option value="">Select a City</option>';
     if (state_id) {
-
-      console.log(state_id)
+      
       fetch(`/states/${state_id}/cities`)
         .then(response => response.json())
         .then(cities => {
           cities.forEach(city => {
-            city_str = city_str + `<option value="${city.id}">${city.name}</option>`
+            if (city.id==selected_city){
+              city_str = city_str + `<option value="${city.id}" selected>${city.name}</option>`
+            }else{
+              city_str = city_str + `<option value="${city.id}">${city.name}</option>`
+            }
             const option = document.createElement('option');
             option.value = city.id;
             option.textContent = city.name;
-            console.log(option)
-            
-          });
-          console.log(city_str)
-          city.innerHTML = city_str
-        });
-      }
-  }
+          }
+        );
+        city.innerHTML = city_str
+        city.dispatchEvent(new Event('change'));
+      })
+      .catch(error => {
+        console.error('Error fetching cities:', error);
+      });
 
-  
+    }
+  }
 
 </script>

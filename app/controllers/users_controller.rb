@@ -18,6 +18,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+  
   end
 
   # POST /users or /users.json
@@ -56,15 +57,6 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  # def cities
-  #   @target = params[:target]
-  #   @cities = City.get(params[:state_id]).invert
-  #   respond_to do |format|
-  #     format.turbo_stream
-  #   end
-  # end
-
 
   private
     # Use callbacks to share common setup or constraints between actions.

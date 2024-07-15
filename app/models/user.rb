@@ -1,9 +1,24 @@
 class User < ApplicationRecord
+  
   belongs_to :state
   belongs_to :city
   serialize :hobbies, Array, coder: YAML
-  # validates :first_name, presence: true
-  # validates :last_name, presence: true
-  # validates :gender, presence: true
+
   
+  VALID_GENDERS = ['male', 'female', 'other']
+  VALID_HOBBIES = ['reading','travelling','photography']
+  VALID_STATES = State.all
+  VALID_CITIES = City.all
+
+  
+  validates :first_name, presence: true, length: { minimum: 2, maximum: 50, message: "must be between 2 and 50 characters" },
+                         format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
+  validates :last_name, presence: true, length: { minimum: 2, maximum: 50, message: "must be between 2 and 50 characters" },
+                         format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
+  validates :gender, presence: true, inclusion: { in: VALID_GENDERS, message: "%{value} is not a valid gender" }
+  validates :hobbies, presence: true, inclusion: { in: VALID_HOBBIES, message: "%{value} is not a valid Hobby." }
+  validates :state, presence: true, inclusion: { in: VALID_STATES, message: "%{value} is not a valid State." }
+  validates :city, presence: true, inclusion: { in: VALID_CITIES, message: "%{value} is not a valid State." }
+
 end

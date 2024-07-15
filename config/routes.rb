@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  resources :cities, only: [:index]
-
+  resources :cities, only: [] do
+    get 'city', on: :member
+  end 
+  
   resources :users 
 
 
