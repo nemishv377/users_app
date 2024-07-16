@@ -1,89 +1,108 @@
 
 <%= form_with(model: user, class: "contents") do |form| %>
-
-  <div class="my-5">
-    <%= form.label :first_name %> <sup>*</sup>
-    <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    <% user.errors.full_messages_for(:first_name).each do |message| %>
-      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
-      <% break %>
-      
-    <% end %>
+  <div id="fullname">
+    <div class="my-5 name">
+      <div class="field_label">
+      <%= form.label :first_name %> <small>*</small>
+      </div>
+      <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-3/5" %>
+      <% user.errors.full_messages_for(:first_name).each do |message| %>
+        <div class="text-red-500 font-medium rounded "><%= message %></div>
+        <% break %>
+        
+      <% end %>
+    </div>
+  
+    <div class="my-5 name last_name">
+      <div class="field_label">
+      <%= form.label :last_name %> <small>*</small>
+      </div>
+      <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-3/5" %>
+      <% user.errors.full_messages_for(:last_name).each do |message| %>
+        <div class="text-red-500 font-medium rounded"><%= message %></div>
+        <% break %>
+      <% end %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :last_name %> <sup>*</sup>
-    <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    <% user.errors.full_messages_for(:last_name).each do |message| %>
-      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
-      <% break %>
-    <% end %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :email %> <sup>*</sup>
+  <div class="my-5 email">
+    <div class="field_label">
+    <%= form.label :email %> <small>*</small>
+    </div>
     <%= form.text_field :email, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:email).each do |message| %>
-      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <div class="text-red-500 font-medium rounded"><%= message %></div>
       <% break %>
     <% end %>
   </div>
 
-  <div class="my-5">
-    <div>
-    Gender<sup>*</sup>
-    <%= form.radio_button :gender, "male" %>
-    <%= form.label :gender_male, "Male" %>
-    <%= form.radio_button :gender, "female" %>
-    <%= form.label :gender_female, "Female" %>
-    <%= form.radio_button :gender, "other" %>
-    <%= form.label :gender_other, "Other" %>
+  <div class="my-5" id="field">
+    Gender<small>*</small>
+    <div id="field_div">
+      <div>
+        <%= form.radio_button :gender, "Male" %>&nbsp;
+        <%= form.label :gender_male, "Male" %>
+      </div>
+      <div>
+        <%= form.radio_button :gender, "Female" %>&nbsp;
+        <%= form.label :gender_female, "Female" %>
+      </div>
+      <div>
+        <%= form.radio_button :gender, "Other" %>&nbsp;
+        <%= form.label :gender_other, "Other" %>
+      </div>
+      </div>
+  </div>
+      <% user.errors.full_messages_for(:gender).each do |message| %>
+        <div class="text-red-500  font-medium rounded mb-7"><%= message %></div>
+        <% break %>
+      <% end %>
+
+  <div class="my-5" id="field">
+    Hobbies<small>*</small>
+    <div id="field_div">
+      <div>
+        <%= form.check_box :hobbies, { multiple: true }, "reading", nil  %>&nbsp; 
+        <%= form.label :hobbies_reading, "Reading" %> 
+      </div>
+      <div>
+        <%= form.check_box :hobbies, { multiple: true }, "travelling", nil %>&nbsp;  
+        <%= form.label :hobbies_travelling, "Travelling" %> 
+      </div>
+      <div>
+        <%= form.check_box :hobbies, { multiple: true }, "photography", nil %>&nbsp; 
+        <%= form.label :hobbies_photography, "Photography" %> 
+      </div>
     </div>
-    <% user.errors.full_messages_for(:gender).each do |message| %>
-      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
-       <% break %>
-    <% end %>
   </div>
+  <% user.errors.full_messages_for(:hobbies).each do |message| %>
+    <div class="text-red-500 pb-5 font-medium rounded "><%= message %></div>
+    <% break %>
+  <% end %>
 
   <div class="my-5">
-    Hobbies<sup>*</sup>
-    <%= form.check_box :hobbies, { multiple: true }, "reading", nil  %> 
-    <%= form.label :hobbies_reading, "Reading" %> 
-    <%= form.check_box :hobbies, { multiple: true }, "travelling", nil %>  
-    <%= form.label :hobbies_travelling, "Travelling" %> 
-    <%= form.check_box :hobbies, { multiple: true }, "photography", nil %> 
-    <%= form.label :hobbies_photography, "Photography" %> 
-    <% user.errors.full_messages_for(:hobbies).each do |message| %>
-      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
-      <% break %>
-    <% end %>
- 
-  </div>
-
-
-  <div class="my-5">
-    <%= form.label :state_id %><sup>*</sup>
-    <%= form.select :state_id, State.all.pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.label :state_id %><small>*</small>
+    <%= form.select :state_id, State.all.order(:name).pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:state).each do |message| %>
-      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <div class="text-red-500 font-medium rounded"><%= message %></div>
       <% break %>
     <% end %>
   </div>
 
   <div class="my-5">
-    <%= form.label :city_id %><sup>*</sup>
+    <%= form.label :city_id %><small>*</small>
     <%= form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:city).each do |message| %>
-      <div class="text-red-500 px-3 py-2 font-medium rounded mt-3"><%= message %></div>
+      <div class="text-red-500 font-medium rounded"><%= message %></div>
       <% break %>
     <% end %>
   </div>
 
-  <div class="my-5">
-    <%= form.label "upload file" %>
-    <%= form.file_field "upload file" , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  <%# <div class="my-5"> %>
+    <%# <%= form.label "upload file" %>
+    <%# <%= form.file_field "upload file" , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %> 
     
-  </div>
+  <%# </div> %>
 
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
@@ -91,58 +110,55 @@
 <% end %>
 
 
-
 <script>
   
-  let state = document.getElementById("user_state_id");
-  let city = document.getElementById("user_city_id");
+  var state = document.getElementById("user_state_id");
+  var city = document.getElementById("user_city_id");
   var current_user = <%= raw user.to_json %>;
   
-  if (state.value>0)
+  if (state.value>0){
+    console.log("edit")
     set_city(state.value, current_user.city_id);
-  
+  }
   state.addEventListener('change', (event) => {
     const stateId = event.target.value;
     var user = <%= raw user.to_json %>;
 
-    if (stateId>0)
+    if (stateId>0){
+      console.log("change")
       set_city(stateId,user.city_id);
+      }
     else{
       city.innerHTML = '<option value="" read-only >Select a City</option>'
       console.log(city.value)
     }
-    city.value = user.city_id
-    console.log(user.city_id)
   });
   
-  // ========================= set city =============================
+  // ========================= Set City =============================
   function set_city(state_id,selected_city)
   {
+    console.log(state.value)
     city_str = '<option value="">Select a City</option>';
     if (state_id) {
-      
       fetch(`/states/${state_id}/cities`)
         .then(response => response.json())
         .then(cities => {
           cities.forEach(city => {
-            if (city.id==selected_city){
+            if (city.id==selected_city)
               city_str = city_str + `<option value="${city.id}" selected>${city.name}</option>`
-            }else{
+            else
               city_str = city_str + `<option value="${city.id}">${city.name}</option>`
-            }
             const option = document.createElement('option');
             option.value = city.id;
             option.textContent = city.name;
           }
         );
         city.innerHTML = city_str
-        city.dispatchEvent(new Event('change'));
+        // city.dispatchEvent(new Event('change'));
       })
       .catch(error => {
         console.error('Error fetching cities:', error);
       });
-
     }
   }
-
 </script>

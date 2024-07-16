@@ -11,11 +11,23 @@
   </div>
 
   <div id="users" class="min-w-full">
+    <table style="width:100%; border:1px solid; margin-top:50px;">
+      <tr>
+        <th>First Name </th>
+        <th>Last Name </th>
+        <th>E-mail </th>
+        <th>Gender </th>
+        <th>Hobby </th>
+        <th>State </th>
+        <th>City</th>
+        <th>Show</th>
+        <th>Modify</th>
+        <th>Delete</th>
+      </tr>
+
     <% @users.each do |user| %>
       <%= render user %>
-      <p>
-        <%= link_to "Show this user", user, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-      </p>
     <% end %>
+    </table>
   </div>
 </div>

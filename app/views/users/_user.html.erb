@@ -1,37 +1,32 @@
 <div id="<%= dom_id user %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">First name:</strong>
-    <%= user.first_name %>
-  </p>
+  
+  <tr>
+  <td class="my-5"> <%= user.first_name %> </td>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Last name:</strong>
-    <%= user.last_name %>
-  </p>
+  <td class="my-5"> <%= user.last_name %> </td>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Email:</strong>
-    <%= user.email %>
-  </p>
+  <td class="my-5"> <%= user.email %> </td>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Gender:</strong>
-    <%= user.gender %>
-  </p>
+  <td class="my-5"> <%= user.gender %> </td>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Hobbies:</strong>
-    <%= user.hobbies.join(", ") %>
-  </p>
+  <td class="my-5"> <%= user.hobbies.join(", ") %>  </td>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">State:</strong>
-    <%= State.find(user.state_id).name %>
-  </p>
+  <td class="my-5"> <%= State.find(user.state_id).name %>  </td>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">City:</strong>
-    <%= City.find(user.city_id).name %>
-  </p>
+  <td class="my-5"> <%= City.find(user.city_id).name %> </td>
+
+  <td>
+    <%= link_to "Show this user", user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-gray-300 inline-block font-medium" %>
+  </td>
+
+  <td>
+    <%= link_to "Edit this user", edit_user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-teal-200 inline-block font-medium" %>
+  </td>
+  <td>
+  <%= link_to "Destroy this user", user_path(user), data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              }, class: "ml-2 rounded-lg py-3 px-3 text-stone bg-red-500 font-medium" %>
+  </td>
 
 </div>

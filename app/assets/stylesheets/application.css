@@ -14,6 +14,72 @@
  *= require_self
  */
 
- sup{
-    color: red;
+small{ 
+   color: red;
+}
+#fullname{
+   display: flex;
+   width: 90%;
+   justify-content: space-around;
+}
+
+.name{
+   width: 50%;
+}
+
+.last_name{
+   display: flex;
+   flex-direction: column;
+   justify-content: right;
+}
+
+.email{
+   margin-top: 0%;
+}
+
+.field_label{
+  display: flex;
+}
+
+ #field{
+   display: flex;
+   align-items: center;
+   margin: 25px 0;
+   padding: 0;
+ }
+
+ 
+#field_div
+{
+   display: flex;
+   width: 40%;
+   align-items: center;
+   justify-content: space-around;
+}
+
+#field_div div{
+   display: flex;
+   align-items: center;
+   width: 20%;
+}
+
+.field_with_errors{
+   display: flex;
+}
+
+tr{
+   height: 65px;
+}
+
+tr:hover{
+   background-color: antiquewhite;
+}
+td{
+
+   text-align: center;
+}
+th{
+   background: slategray;
+   font-size: large;
+   color: rgb(248, 243, 243);  
  }

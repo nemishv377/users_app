@@ -5,7 +5,7 @@ class User < ApplicationRecord
   serialize :hobbies, Array, coder: YAML
 
   
-  VALID_GENDERS = ['male', 'female', 'other']
+  VALID_GENDERS = ['Male', 'Female', 'Other']
   VALID_HOBBIES = ['reading','travelling','photography']
   VALID_STATES = State.all
   VALID_CITIES = City.all

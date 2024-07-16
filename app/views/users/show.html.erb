@@ -4,12 +4,50 @@
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
 
-    <%= render @user , user: @user %>
 
-    <%= link_to "Edit this user", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <p class="my-5">
+    <strong>First name: </strong> &nbsp;&nbsp;&nbsp; 
+    <%= @user.first_name %>
+  </p>
+
+  <p class="my-5">
+    <strong>Last name:</strong> &nbsp;&nbsp;&nbsp; 
+    <%= @user.last_name %>
+  </p>
+
+  <p class="my-5">
+    <strong>Email:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    <%= @user.email %>
+  </p>
+
+  <p class="my-5">
+    <strong >Gender:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%= @user.gender %>
+  </p>
+
+  <p class="my-5">
+    <strong >Hobbies:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%= @user.hobbies.join(", ") %>
+  </p>
+
+  <p class="my-5">
+    <strong >State:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%= State.find(@user.state_id).name %>
+  </p>
+
+  <p class="my-5">
+    <strong >City:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%= City.find(@user.city_id).name %>
+  </p>
+
+
     <%= link_to "Back to users", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <div class="inline-block ml-2">
-      <%= button_to "Destroy this user", @user, method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
-    </div>
+    <%= link_to "Edit this user", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
+    <%= link_to "Destroy this user", user_path(@user), data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium" %>
+
+  
   </div>
 </div>
