@@ -16,14 +16,14 @@
   <td class="my-5"> <%= City.find(user.city_id).name %> </td>
 
   <td>
-    <%= link_to "Show this user", user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-gray-300 inline-block font-medium" %>
+    <%= link_to "Show", user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-gray-300 inline-block font-medium" %>
   </td>
 
   <td>
-    <%= link_to "Edit this user", edit_user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-teal-200 inline-block font-medium" %>
+    <%= link_to "Edit", edit_user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-teal-200 inline-block font-medium" %>
   </td>
   <td>
-  <%= link_to "Destroy this user", user_path(user), data: {
+  <%= link_to "Delete", user_path(user), data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
               }, class: "ml-2 rounded-lg py-3 px-3 text-stone bg-red-500 font-medium" %>
