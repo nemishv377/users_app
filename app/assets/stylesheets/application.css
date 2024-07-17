@@ -45,6 +45,7 @@ small{
    display: flex;
    align-items: center;
    margin: 25px 0;
+   margin-bottom: 0;
    padding: 0;
  }
 
