@@ -1,9 +1,10 @@
 
 <%= form_with(model: user, class: "contents", name: "login-form") do |form| %>
-  
+  <div id="fullname">
     <div class="my-5 name">
-     
-      <%= form.label :first_name %> <small>*</small>
+      <div class="field_label">
+        <%= form.label :first_name %> <small>*</small>
+      </div>
       <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-3/5" ,placeholder: "First name" %>
       <% user.errors.full_messages_for(:first_name).each do |message| %>
         <div class="text-red-500 font-medium rounded "><%= message %></div>
@@ -12,14 +13,16 @@
     </div>
   
     <div class="my-5 name">
-      <%= form.label :last_name %> <small>*</small>
+      <div class="field_label">
+        <%= form.label :last_name %> <small>*</small>
+      </div>
       <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-3/5" ,placeholder: "Last name"%>
       <% user.errors.full_messages_for(:last_name).each do |message| %>
         <div class="text-red-500 font-medium rounded"><%= message %></div>
         <% break %>
       <% end %>
     </div>
-  
+  </div>
 
   <div class="my-5 email">
     <div class="field_label">
@@ -157,36 +160,5 @@
       });
     }
   }
-
-
-  
-  var myform = document.querySelector('form');
-  myform.addEventListener('submit', function(event) {
-  //   // Prevent default form submission
-    // event.preventDefault();
-    
-  //   // Example logic to remove extra <div> elements
-    const extraDivs = document.querySelectorAll('form>div>div.field_with_errors');
-    console.log(extraDivs);
-  //   extraDivs.forEach(extraDiv => {
-  //     const parentDiv = extraDiv.parentNode;
-  //     while (extraDiv.firstChild) {
-  //       parentDiv.insertBefore(extraDiv.firstChild, extraDiv);
-  //     }
-  //     parentDiv.removeChild(extraDiv);
-  //   });
-
-  //   // Submit the form
-  //   form.submit();
-  });
-
-
-
-
-
-
-
-
-
 
 </script>
