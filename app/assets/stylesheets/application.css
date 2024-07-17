@@ -68,19 +68,33 @@ small{
    display: flex;
 }
 
-tr{
+#index_page_table tr{
    height: 65px;
 }
 
-tr:hover{
+#index_page_table tr:hover{
    background-color: antiquewhite;
 }
-td{
+#index_page_table td{
 
    text-align: center;
 }
-th{
+#index_page_table th{
    background: slategray;
    font-size: large;
    color: rgb(248, 243, 243);  
+ }
+
+ #show_table tr{
+   height: 50px;
+   font-size: larger;
+}
+
+#show_table th,#show_table td{
+   padding: 5px;
+}
+
+#show_table th{
+   text-align: left;
+   font-weight: 600;
  }

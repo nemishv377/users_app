@@ -4,48 +4,45 @@
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
 
+    <table id="show_table">
+      <tr>
+        <th><strong>First name </strong></th>
+        <td>: <%= @user.first_name %></td>
+      </tr>
+      <tr>
+        <th><strong>Last name  </strong></th>
+        <td>: <%= @user.last_name %></td>
+      </tr>
+      <tr>
+        <th><strong>Email </strong></th>
+        <td>: <%= @user.email %></td>
+      </tr>
+      <tr>
+        <th><strong>Gender  </strong></th>
+        <td>: <%= @user.gender %></td>
+      </tr>
+      <tr>
+        <th><strong>Hobby  </strong></th>
+        <td>:  <%= @user.hobbies.join(", ") %></td>
+      </tr>
+      <tr>
+        <th><strong>State  </strong></th>
+        <td>: <%= State.find(@user.state_id).name %></td>
+      </tr>
+      <tr>
+        <th><strong>City  </strong></th>
+        <td>: <%= City.find(@user.city_id).name %></td>
+      </tr>
+    </table>
 
-  <p class="my-5">
-    <strong>First name: </strong>  &nbsp;&nbsp;&nbsp; 
-    <%= @user.first_name %>
-  </p>
 
-  <p class="my-5">
-    <strong>Last name:</strong> &nbsp;&nbsp;&nbsp; 
-    <%= @user.last_name %>
-  </p>
-
-  <p class="my-5">
-    <strong>Email:</strong>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-    <%= @user.email %>
-  </p>
-
-  <p class="my-5">
-    <strong >Gender:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <%= @user.gender %>
-  </p>
-
-  <p class="my-5">
-    <strong >Hobbies:</strong>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <%= @user.hobbies.join(", ") %>
-  </p>
-
-  <p class="my-5">
-    <strong >State:</strong>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <%= State.find(@user.state_id).name %>
-  </p>
-
-  <p class="my-5">
-    <strong >City:</strong>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <%= City.find(@user.city_id).name %>
-  </p>
 
 
     <%= link_to "Edit", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
     <%= link_to "Delete", user_path(@user), data: {
       turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
-              }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium" %>
+              }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
     <%= link_to "Back", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
 
   
