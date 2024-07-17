@@ -70,6 +70,7 @@ small{
 
 #index_page_table tr{
    height: 65px;
+   border-bottom: 1px solid slategray;
 }
 
 #index_page_table tr:hover{
@@ -96,5 +97,5 @@ small{
 
 #show_table th{
    text-align: left;
-   font-weight: 600;
+   font-weight: 400;
  }
