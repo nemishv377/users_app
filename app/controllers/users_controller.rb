@@ -14,6 +14,8 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    # @user.build_state
+    # @user.build_city
   end
 
   # GET /users/1/edit
@@ -24,7 +26,13 @@ class UsersController < ApplicationController
   # POST /users or /users.json
   def create
     @user = User.new(user_params)
-
+    # @state_id = user_params(state_id)
+    # @para = user_params
+    # puts "hello #{@para[:state_id][:state_id]}"
+    # State.create(name: @para[:state_id][:state_id])
+    # puts "state"
+    # City.create(name: @para[:city_id][:city_id],state_id: @para[:state_id][:state_id])
+    # puts "city"
     respond_to do |format|
       if @user.save
         format.html { redirect_to user_url(@user), notice: "User was successfully created." }
@@ -66,8 +74,8 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :gender, :state_id, :city_id, hobbies: [],
-                                    # state_attributes: [:id, :name], city_attributes: [:id, :name, :state_id]
-       )
+      params.require(:user).permit(:first_name, :last_name, :email, :gender, state_id: [:state_id], city_id: [:city_id],
+      #  state_attributes: [:id, :name],:state_name,:city_name,
+       hobbies: [])
     end
 end

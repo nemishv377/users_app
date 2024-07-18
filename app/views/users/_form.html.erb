@@ -78,11 +78,19 @@
     <div class="text-red-500 font-medium rounded "><%= message %></div>
     <% break %>
   <% end %>
+  
+  <%# <div class="my-5"> %>
+    <%# <div> %>
+      <%# <%= form.label :state_name, 'State name' %> 
+      <%# <%= form.select :state_id, State.all.order(:name).pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %> 
+    <%# </div> %>
+  <%# </div> %>
 
+  
   <div class="my-5">
-    <%= form.fields_for :states do |state_form|%>
+    <%= form.fields_for :state_id do |state_form|%>
       <div class="field_label">
-      <%= state_form.label :state_id %><small>*</small>
+        <%= state_form.label :state_id %><small>*</small>
       </div>
       <%= state_form.select :state_id, State.all.order(:name).pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% end %>
@@ -93,10 +101,12 @@
   </div>
 
   <div class="my-5">
-    <div class="field_label">
-    <%= form.label :city_id %><small>*</small>
-    </div>
-    <%= form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.fields_for :city_id do |city_form|%>
+      <div class="field_label">
+        <%= city_form.label :city_id %><small>*</small>
+      </div>
+      <%= city_form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <% end %>
     <% user.errors.full_messages_for(:city).each do |message| %>
       <div class="text-red-500 font-medium rounded"><%= message %></div>
       <% break %>
@@ -117,9 +127,12 @@
 
 <script>
   
-  var state = document.getElementById("user_states_state_id");
-  var city = document.getElementById("user_city_id");
+  var state = document.getElementById("user_state_id_state_id");
+  var city = document.getElementById("user_city_id_city_id");
   var current_user = <%= raw user.to_json %>;
+
+  console.log(current_user)
+  console.log(current_user.city_id)
   
   if (state.value>0){
     // state.value = current_user.state_id
