@@ -13,10 +13,13 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    @user.addresses.build
   end
 
   # GET /users/1/edit
   def edit
+    @user.build_address if @user.addresses.nil?
+    puts @user.addresses
   end
 
   # POST /users or /users.json
@@ -63,6 +66,7 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :gender, :state_id, :city_id, hobbies: [])
+      params.require(:user).permit(:first_name, :last_name, :email, :gender, :state_id, :city_id, hobbies: [], 
+                                    addresses_attributes: [:id, :plot_no, :society_name, :pincode, :_destroy])
     end
 end
