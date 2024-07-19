@@ -1,0 +1,44 @@
+<div class="my-5" id="addresses">
+  <% user.addresses.each_with_index do |address, index| %>
+  <strong>Address</strong><br> 
+    
+    <div class="my-5">
+      <div class="field_label">
+        <%= form.label :plot_no, "Plot No."%><small>*</small>
+      </div>
+      <%= form.text_field :plot_no, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "Ex:- 123/A123" %>
+      <% address.errors.full_messages_for(:plot_no).each do |message| %>
+        <div class="text-red-500 font-medium rounded mb-7"><%= message %></div>
+        <% break %>
+      <% end %>
+    </div>
+
+    <div class="my-5">
+      <div class="field_label">
+        <%= form.label :society_name, "Society name"%><small>*</small>
+      </div>
+      <%= form.text_field :society_name , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
+      <% address.errors.full_messages_for(:society_name).each do |message| %>
+        <div class="text-red-500 font-medium rounded mb-7"><%= message %></div>
+        <% break %>
+      <% end %>
+    </div>
+      
+    
+    <div class="my-5">
+      <div class="field_label">
+        <%= form.label :pincode, "Pincode"%><small>*</small>
+      </div>
+      <%= form.text_field :pincode , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
+      <% address.errors.full_messages_for(:pincode).each do |message| %>
+        <div class="text-red-500 font-medium rounded mb-7"><%= message %></div>
+        <% break %>
+      <% end %>
+    </div>
+     <%# <%= link_to_remove_association "Remove address", form %> 
+     <%= link_to_remove_association "remove address", form %>
+  <%# <%= form.check_box :_destroy %>
+  <%# <%= form.label :_destroy, "Remove address" %> <br> 
+  <% end %>
+  
+</div>
