@@ -1,0 +1,21 @@
+<div class="my-5">
+    <strong>Address</strong><br> 
+    
+    <div class="my-5">
+      <%= form.label :plot_no, "Plot no."%>
+      <%= form.text_field :plot_no, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
+    </div>
+
+    <div class="my-5">
+      <%= form.label :society_name, "Society name"%>
+      <%= form.text_field :society_name , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
+    </div>
+    
+    <div class="my-5">
+      <%= form.label :pincode, "pincode"%>
+      <%= form.text_field :pincode , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
+    </div>
+
+    <%= form.check_box :_destroy  %>
+    <%= form.label :_destroy, "Remove Address" %> <br>  
+</div>

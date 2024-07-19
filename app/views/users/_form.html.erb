@@ -3,7 +3,7 @@
   <div id="fullname">
     <div class="my-5 name">
       <div class="field_label">
-        <%= form.label :first_name %> <small>*</small>
+        <strong><%= form.label :first_name %></strong> <small>*</small>
       </div>
       <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "First name" %>
       <% user.errors.full_messages_for(:first_name).each do |message| %>
@@ -14,7 +14,7 @@
   
     <div class="my-5 name">
       <div class="field_label">
-        <%= form.label :last_name %> <small>*</small>
+        <strong><%= form.label :last_name %></strong> <small>*</small>
       </div>
       <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "Last name"%>
       <% user.errors.full_messages_for(:last_name).each do |message| %>
@@ -26,7 +26,7 @@
 
   <div class="my-5 email">
     <div class="field_label">
-    <%= form.label :email %> <small>*</small>
+      <strong><%= form.label :email %> </strong><small>*</small>
     </div>
     <%= form.text_field :email, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "abcd@gmail.com"  %>
     <% user.errors.full_messages_for(:email).each do |message| %>
@@ -36,7 +36,7 @@
   </div>
 
   <div class="my-5" id="field">
-    <%= form.label :Gender%><small>*</small>
+    <strong>Gender</strong><small>*</small>
     <div id="field_div">
       <div>
         <%= form.radio_button :gender, "Male" %>&nbsp;
@@ -58,7 +58,7 @@
       <% end %>
 
   <div class="my-5" id="field">
-    <%= form.label :Hobbies %><small>*</small>
+    <strong>Hobbies</strong><small>*</small>
     <div id="field_div">
       <div>
         <%= form.check_box :hobbies, { multiple: true }, "reading", nil  %>&nbsp; 
@@ -78,10 +78,15 @@
     <div class="text-red-500 font-medium rounded "><%= message %></div>
     <% break %>
   <% end %>
-    
+  
+  <%= form.fields_for :addresses do |address_form| %>
+    <%= render 'address_fields', form: address_form %>
+  <% end %>
+  <%= link_to_add_fields "Add Addresses", form, :addresses %>
+
   <div class="my-5">
     <div class="field_label">
-      <%= form.label :state_id %><small>*</small>
+      <strong><%= form.label :state_id %></strong><small>*</small>
     </div>
     <%= form.select :state_id, State.all.order(:name).pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:state).each do |message| %>
@@ -92,7 +97,7 @@
 
   <div class="my-5">
     <div class="field_label">
-      <%= form.label :city_id %><small>*</small>
+      <strong><%= form.label :city_id %></strong><small>*</small>
     </div>
     <%= form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <% user.errors.full_messages_for(:city).each do |message| %>
