@@ -7,6 +7,9 @@ gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
+gem "cocoon"
+
+# gem "nested_form"
 
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
@@ -43,6 +46,8 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
+# gem "jquery-rails"
+# gem "sassc-rails"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
