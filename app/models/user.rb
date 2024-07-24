@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :addresses ,dependent: :destroy
+  has_many :addresses ,dependent: :destroy
   belongs_to :state
   belongs_to :city
   serialize :hobbies, Array, coder: YAML
