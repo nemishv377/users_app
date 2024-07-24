@@ -1,10 +1,9 @@
 <div class="my-5" id="addresses">
-  <% user.addresses.each_with_index do |address, index| %>
     <div style="width:100%; display: flex; justify-content: space-between; align-items:center;">
       <strong>Address</strong> 
-      <div class="ml-2 rounded-lg py-2 px-3 text-white bg-red-500 font-medium">
+      <div class="ml-2 rounded-lg py-2 px-3 text-white bg-red-500 font-medium cursor-pointer">
         <%= f.check_box :_destroy, class: "destroy" %> 
-        <%= f.label :_destroy, "Remove" %> 
+        <%= f.label :_destroy, "Remove", class: "cursor-pointer" %> 
         <%# link_to_remove_association "Remove", f %>
       </div>
     </div> 
@@ -13,10 +12,13 @@
         <%= f.label :plot_no, "Plot No."%><small>*</small>
       </div>
       <%= f.text_field :plot_no, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "Ex:- 123/A123" %>
-      <% address.errors.full_messages_for(:plot_no).each do |message| %>
-        <div class="text-red-500 font-medium rounded mb-7"><%= message %></div>
-        <% break %>
-      <% end %>
+      <div class="error">
+        <% f.object.errors[:plot_no].each do |message| %>
+          <div class="text-red-500 font-medium rounded"><%= message %></div>
+          <% break %>
+        <% end %>
+      </div>
+
     </div>
 
     <div class="my-5">
@@ -24,10 +26,13 @@
         <%= f.label :society_name, "Society name"%><small>*</small>
       </div>
       <%= f.text_field :society_name , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
-      <% address.errors.full_messages_for(:society_name).each do |message| %>
-        <div class="text-red-500 font-medium rounded mb-7"><%= message %></div>
-        <% break %>
-      <% end %>
+      <div class="error">
+        <% f.object.errors[:society_name].each do |message| %>
+          <div class="text-red-500 font-medium rounded"><%= message %></div>
+          <% break %>
+        <% end %>
+      </div>
+     
     </div>
       
     
@@ -36,23 +41,31 @@
         <%= f.label :pincode, "Pincode"%><small>*</small>
       </div>
       <%= f.text_field :pincode , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
-      <% address.errors.full_messages_for(:pincode).each do |message| %>
-        <div class="text-red-500 font-medium rounded mb-7"><%= message %></div>
-        <% break %>
-      <% end %>
+      <div class="error">
+        <% f.object.errors[:pincode].each do |message| %>
+          <div class="text-red-500 font-medium rounded"><%= message %></div>
+          <% break %>
+        <% end %>
+      </div>
+
     </div>
-  <% end %>
+ 
   
 </div>
 
 <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+
     document.addEventListener('click', function(event) {
       if (event.target.classList.contains('destroy')) {
         event.target.value = 1;
         destroy_add = event.target.parentNode.parentNode.parentNode;
         console.log(destroy_add);
-        destroy_add.style.display = 'hide';
+        destroy_add.style.display = 'none';
+        console.log("deleted")
       }
+    });
     });
 
     $(document).ready(function() {
@@ -66,7 +79,7 @@
         if (this.value==1){
           let address = $("#addresses");
           console.log(address);
-          address[0].style.display = 'none';
+          address.style.display = 'none';
           console.log("done");
         }
       });
