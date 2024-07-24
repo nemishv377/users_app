@@ -1,72 +1,73 @@
 <div class="my-5" id="addresses">
-    <div style="width:100%; display: flex; justify-content: space-between; align-items:center;">
-      <strong>Address</strong> 
-      <div class="ml-2 rounded-lg py-2 px-3 text-white bg-red-500 font-medium cursor-pointer">
-        <%= f.check_box :_destroy, class: "destroy" %> 
-        <%= f.label :_destroy, "Remove", class: "cursor-pointer" %> 
-        <%# link_to_remove_association "Remove", f %>
-      </div>
-    </div> 
-    <div class="my-5">
-      <div class="field_label">
-        <%= f.label :plot_no, "Plot No."%><small>*</small>
-      </div>
-      <%= f.text_field :plot_no, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "Ex:- 123/A123" %>
-      <div class="error">
-        <% f.object.errors[:plot_no].each do |message| %>
-          <div class="text-red-500 font-medium rounded"><%= message %></div>
-          <% break %>
-        <% end %>
-      </div>
-
-    </div>
-
-    <div class="my-5">
-      <div class="field_label">
-        <%= f.label :society_name, "Society name"%><small>*</small>
-      </div>
-      <%= f.text_field :society_name , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
-      <div class="error">
-        <% f.object.errors[:society_name].each do |message| %>
-          <div class="text-red-500 font-medium rounded"><%= message %></div>
-          <% break %>
-        <% end %>
-      </div>
-     
-    </div>
-      
-    
-    <div class="my-5">
-      <div class="field_label">
-        <%= f.label :pincode, "Pincode"%><small>*</small>
-      </div>
-      <%= f.text_field :pincode , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
-      <div class="error">
-        <% f.object.errors[:pincode].each do |message| %>
-          <div class="text-red-500 font-medium rounded"><%= message %></div>
-          <% break %>
-        <% end %>
-      </div>
-
-    </div>
- 
   
+  <div style="width:100%; display: flex; justify-content: space-between; align-items:center;">
+    <strong>Permenent Address :</strong> 
+      <%= f.check_box :_destroy, class: "destroy" %> 
+      <%= f.label :_destroy, "X", class: "cursor-pointer" %> 
+
+  </div> 
+
+  <div class="my-5">
+    <div class="field_label">
+      <%= f.label :plot_no, "Plot No."%><small>*</small>
+    </div>
+    <%= f.text_field :plot_no, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "Ex:- 123/A123" %>
+    <div class="error">
+      <% f.object.errors[:plot_no].each do |message| %>
+        <div class="text-red-500 font-medium rounded"><%= message %></div>
+        <% break %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="my-5">
+    <div class="field_label">
+      <%= f.label :society_name, "Society name"%><small>*</small>
+    </div>
+    <%= f.text_field :society_name , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
+    <div class="error">
+      <% f.object.errors[:society_name].each do |message| %>
+        <div class="text-red-500 font-medium rounded"><%= message %></div>
+        <% break %>
+      <% end %>
+    </div>
+  </div>
+    
+  <div class="my-5">
+    <div class="field_label">
+      <%= f.label :pincode, "Pincode"%><small>*</small>
+    </div>
+    <%= f.text_field :pincode , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full"%>
+    <div class="error">
+      <% f.object.errors[:pincode].each do |message| %>
+        <div class="text-red-500 font-medium rounded"><%= message %></div>
+        <% break %>
+      <% end %>
+    </div>
+  </div>
+
 </div>
 
 <script>
 
-      document.addEventListener('DOMContentLoaded', function() {
-
+  document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
       if (event.target.classList.contains('destroy')) {
-        event.target.value = 1;
-        destroy_add = event.target.parentNode.parentNode.parentNode;
-        console.log(destroy_add);
-        destroy_add.style.display = 'none';
-        console.log("deleted")
+        console.log(event.target.id)
+        if (event.target.id=="user_addresses_attributes_0__destroy"){
+          event.target.value = 0;
+          alert("You must have to add one address.");
+          console.log("after alert",event.target.value)
+        
+        }
+        else{
+          event.target.value = 1;
+          destroy_add = event.target.parentNode.parentNode;
+          destroy_add.style.display = 'none';
+        }
       }
     });
-    });
+  });
 
     $(document).ready(function() {
       let destroies = $(".destroy");
@@ -75,16 +76,6 @@
         console.log(destroy);
         destroy.style.display = 'none';
       }
-      $(destroy).change(function(){
-        if (this.value==1){
-          let address = $("#addresses");
-          console.log(address);
-          address.style.display = 'none';
-          console.log("done");
-        }
-      });
   });
   
-  
-
 </script> 
