@@ -1,9 +1,11 @@
 <div class="my-5" id="addresses">
   <% user.addresses.each_with_index do |address, index| %>
-    <div style="width:100%; display: flex; justify-content: space-between;">
+    <div style="width:100%; display: flex; justify-content: space-between; align-items:center;">
       <strong>Address</strong> 
       <div class="ml-2 rounded-lg py-2 px-3 text-white bg-red-500 font-medium">
-        <%= link_to_remove_association "Remove", f %>
+        <%= f.check_box :_destroy, class: "destroy" %> 
+        <%= f.label :_destroy, "Remove" %> 
+        <%# link_to_remove_association "Remove", f %>
       </div>
     </div> 
     <div class="my-5">
@@ -39,8 +41,37 @@
         <% break %>
       <% end %>
     </div>
-      <%= f.check_box :_destroy %> 
-      <%= f.label :_destroy, "Remove address" %> 
   <% end %>
   
 </div>
+
+<script>
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('destroy')) {
+        event.target.value = 1;
+        destroy_add = event.target.parentNode.parentNode.parentNode;
+        console.log(destroy_add);
+        destroy_add.style.display = 'hide';
+      }
+    });
+
+    $(document).ready(function() {
+      let destroies = $(".destroy");
+      console.log(destroies);
+      for(var destroy of destroies){
+        console.log(destroy);
+        destroy.style.display = 'none';
+      }
+      $(destroy).change(function(){
+        if (this.value==1){
+          let address = $("#addresses");
+          console.log(address);
+          address[0].style.display = 'none';
+          console.log("done");
+        }
+      });
+  });
+  
+  
+
+</script> 
