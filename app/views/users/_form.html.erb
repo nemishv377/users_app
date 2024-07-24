@@ -90,7 +90,6 @@
    
   <%# ============================ Nested address form ==================================== %>
 
-
   <div class="my-5">
     <div class="field_label">
       <strong><%= form.label :state_id %></strong><small>*</small>
@@ -130,13 +129,7 @@
   var state = document.getElementById("user_state_id");
   var city = document.getElementById("user_city_id");
   var current_user = <%= raw user.to_json %>;
-
-  // $(document).ready(function() {
-  //       $("#fullname").click(function() {
-  //         alert("Button clicked!");
-  //       });
-  //     });
-
+  
   if (state.value>0){
     console.log("edit");
     set_city(state.value, current_user.city_id);
