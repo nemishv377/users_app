@@ -26,17 +26,15 @@
         <td>:  <%= @user.hobbies.join(", ") %></td>
       </tr>
       <tr>
-        <th><strong>State  </strong></th>
-        <td>: <%= State.find(@user.state_id).name %></td>
+        <th><strong>Address  </strong></th>
+        <td>:  <%= @user.addresses[0].plot_no + ", " + @user.addresses[0].society_name + ", "  + City.find_by(id: @user.addresses[0].city_id).name + "-" + @user.addresses[0].pincode  %></td>
       </tr>
       <tr>
-        <th><strong>City  </strong></th>
-        <td>: <%= City.find(@user.city_id).name %></td>
+        <th><strong>State  </strong></th>
+        <td>: <%= State.find_by(id: @user.addresses[0].state_id).name %></td>
       </tr>
+   
     </table>
-
-
-
 
     <%= link_to "Edit", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
     <%= link_to "Delete", user_path(@user), data: {
