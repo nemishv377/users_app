@@ -1,7 +1,7 @@
 <div class="my-5" id="addresses">
   
   <div style="width:100%; display: flex; justify-content: space-between; align-items:center;">
-    <strong>Permenent Address :</strong> 
+    <strong>Address :</strong> 
       <%= f.check_box :_destroy, class: "destroy" %> 
       <%= f.label :_destroy, "X", class: "cursor-pointer" %> 
 
@@ -50,26 +50,7 @@
 
 <script>
 
-  document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(event) {
-      if (event.target.classList.contains('destroy')) {
-        console.log(event.target.id)
-        if (event.target.id=="user_addresses_attributes_0__destroy"){
-          event.target.value = 0;
-          alert("You must have to add one address.");
-          console.log("after alert",event.target.value)
-        
-        }
-        else{
-          event.target.value = 1;
-          destroy_add = event.target.parentNode.parentNode;
-          destroy_add.style.display = 'none';
-        }
-      }
-    });
-  });
-
-    $(document).ready(function() {
+  $(document).ready(function() {
       let destroies = $(".destroy");
       console.log(destroies);
       for(var destroy of destroies){

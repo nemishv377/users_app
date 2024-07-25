@@ -125,7 +125,6 @@
 
 <script>
 
-  
   var state = document.getElementById("user_state_id");
   var city = document.getElementById("user_city_id");
   var current_user = <%= raw user.to_json %>;
@@ -147,7 +146,24 @@
       console.log(city.value)
     }
   });
-  
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('destroy')) {
+        console.log(event.target.id)
+        if (event.target.id=="user_addresses_attributes_0__destroy"){
+          event.target.value = 0;
+          alert("You should not remove your Permanent address!");
+        }
+        else{
+          event.target.value = 1;
+          destroy_add = event.target.parentNode.parentNode;
+          destroy_add.style.display = 'none';
+        }
+      }
+    });
+  });
+
   // ========================= Set City =============================
   function set_city(state_id,selected_city)
   {
