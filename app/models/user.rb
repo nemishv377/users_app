@@ -1,14 +1,10 @@
 class User < ApplicationRecord
   has_many :addresses ,dependent: :destroy
-  belongs_to :state
-  belongs_to :city
   serialize :hobbies, Array, coder: YAML
   accepts_nested_attributes_for :addresses, allow_destroy: true
   
   VALID_GENDERS = ['Male', 'Female', 'Other']
   VALID_HOBBIES = ['reading','travelling','photography']
-  VALID_STATES = State.all
-  VALID_CITIES = City.all
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   
@@ -19,7 +15,6 @@ class User < ApplicationRecord
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :gender, presence: true, inclusion: { in: VALID_GENDERS, message: "%{value} is not a valid gender" }
   validates :hobbies, presence: true, inclusion: { in: VALID_HOBBIES, message: "%{value} is not a valid Hobby." }
-  validates :state, presence: true, inclusion: { in: VALID_STATES, message: "%{value} is not a valid State." }
-  validates :city, presence: true, inclusion: { in: VALID_CITIES, message: "%{value} is not a valid City." }
+
 
 end

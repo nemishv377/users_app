@@ -84,33 +84,11 @@
   <%= form.fields_for :addresses do |address_form| %>
     <%= render 'address_fields', f: address_form, user: user %>
   <% end %>
-  <div class="rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium cursor-pointer" style="margin-top:20px;">
+  <div class="rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium cursor-pointer" >
     <%= link_to_add_association "+Add address", form, :addresses, render_options:  {locals: { user: user }}  %>
   </div>
    
   <%# ============================ Nested address form ==================================== %>
-
-  <div class="my-5">
-    <div class="field_label">
-      <strong><%= form.label :state_id %></strong><small>*</small>
-    </div>
-    <%= form.select :state_id, State.all.order(:name).pluck(:name, :id), { prompt: "Select a State" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    <% user.errors.full_messages_for(:state).each do |message| %>
-      <div class="text-red-500 font-medium rounded"><%= message %></div>
-      <% break %>
-    <% end %>
-  </div>
-
-  <div class="my-5">
-    <div class="field_label">
-      <strong><%= form.label :city_id %></strong><small>*</small>
-    </div>
-    <%= form.select :city_id , [], { prompt: "Select a City" }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    <% user.errors.full_messages_for(:city).each do |message| %>
-      <div class="text-red-500 font-medium rounded"><%= message %></div>
-      <% break %>
-    <% end %>
-  </div>
 
   <div class="my-5">
     <%= form.label "upload file" %>
@@ -125,32 +103,7 @@
 
 <script>
 
-  var state = document.getElementById("user_state_id");
-  var city = document.getElementById("user_city_id");
-  var current_user = <%= raw user.to_json %>;
-  var current_user_addresses = <%= raw user.addresses.to_json %>;
-  console.log(current_user_addresses);
-  
-  if (state.value>0){
-    console.log("edit");
-    set_city(state.value, current_user.city_id);
-  }
-  state.addEventListener('change', (event) => {
-    const stateId = event.target.value;
-    var user = <%= raw user.to_json %>;
-    console.log(user)
-    if (stateId>0){
-      console.log("change");
-      set_city(stateId,user.city_id);
-      }
-    else{
-      city.innerHTML = '<option value="" read-only >Select a City</option>'
-      console.log(city.value)
-    }
-  });
-
   // =========================== Nested form ========================================
-
   document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
       if (event.target.classList.contains('destroy')) {
@@ -167,66 +120,39 @@
       }
 
 // =========================== Nested state and city ========================================
-      if(event.target.classList.contains('states')){
-        nested_state = event.target;
-        nested_city = nested_state.parentNode.nextElementSibling.getElementsByClassName('cities')[0];
-        console.log(nested_state.value);
-        console.log(nested_city.innerHTML);
-
-
-    
-
-        nested_state.addEventListener("change",function(event){
-          const nested_stateId = event.target.value;
-          console.log(nested_stateId);
-          console.log(current_user_addresses.city_id);
-
-          if (nested_stateId>0){
-            console.log("change");
-            set_city(nested_state.value,current_user_addresses.city_id);
-          }
-          else{
-            nested_city.innerHTML = '<option value="" read-only >Select a City</option>'
-            console.log(nested_city.value)
-          }
-        })
-        
-        // console.log(nested_city.innerHTML);
+      for(var stateSelecet of document.querySelectorAll('.states')){
+        stateSelecet.addEventListener("change", (event) => {
+          
+          const stateId = event.target.value;
+          console.log("stateId",stateId);
+          nested_city = event.target.parentNode.nextElementSibling.getElementsByClassName('cities')[0];
+          console.log("nested city",nested_city);
+          set_city(stateId,nested_city);
+        });
       }
     });
   });
 
   // ========================= Set City =============================
-    count = 0
-  function set_city(state_id,selected_city)
+
+  function set_city(stateId,nested_city)
   {
-    console.log(state_id)
-    console.log(count++)
-    city_str = '<option value="">Select a City</option>';
-    if (state_id) {
-      fetch(`/states/${state_id}/cities`)
+    if(stateId)
+    {
+      fetch(`/states/${stateId}/cities`)
         .then(response => response.json())
         .then(cities => {
+          nested_city.innerHTML = '<option value="" read-only >Select a City</option>';
           cities.forEach(city => {
-            if (city.id==selected_city)
-              city_str = city_str + `<option value="${city.id}" selected>${city.name}</option>`
-            else{
-              city_str = city_str + `<option value="${city.id}">${city.name}</option>`
-              console.log(city);
-              }
             const option = document.createElement('option');
             option.value = city.id;
             option.textContent = city.name;
-          }
-        );
-        city.innerHTML = city_str
-        console.log(city_str)
-        nested_city.innerHTML = city_str;
-        city.dispatchEvent(new Event('change'));
-      })
-      .catch(error => {
-        console.error('Error fetching cities:', error);
-     });  
+            nested_city.appendChild(option);
+          });
+        })
+      }
+      else{
+        nested_city.innerHTML = '<option value="" read-only >Select a City</option>';
     }
   }
 
