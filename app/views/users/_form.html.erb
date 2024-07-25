@@ -128,6 +128,8 @@
   var state = document.getElementById("user_state_id");
   var city = document.getElementById("user_city_id");
   var current_user = <%= raw user.to_json %>;
+  var current_user_addresses = <%= raw user.addresses.to_json %>;
+  console.log(current_user_addresses);
   
   if (state.value>0){
     console.log("edit");
@@ -147,6 +149,8 @@
     }
   });
 
+  // =========================== Nested form ========================================
+
   document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
       if (event.target.classList.contains('destroy')) {
@@ -161,13 +165,43 @@
           destroy_add.style.display = 'none';
         }
       }
+
+// =========================== Nested state and city ========================================
+      if(event.target.classList.contains('states')){
+        nested_state = event.target;
+        nested_city = nested_state.parentNode.nextElementSibling.getElementsByClassName('cities')[0];
+        console.log(nested_state.value);
+        console.log(nested_city.innerHTML);
+
+
+    
+
+        nested_state.addEventListener("change",function(event){
+          const nested_stateId = event.target.value;
+          console.log(nested_stateId);
+          console.log(current_user_addresses.city_id);
+
+          if (nested_stateId>0){
+            console.log("change");
+            set_city(nested_state.value,current_user_addresses.city_id);
+          }
+          else{
+            nested_city.innerHTML = '<option value="" read-only >Select a City</option>'
+            console.log(nested_city.value)
+          }
+        })
+        
+        // console.log(nested_city.innerHTML);
+      }
     });
   });
 
   // ========================= Set City =============================
+    count = 0
   function set_city(state_id,selected_city)
   {
-    console.log(state.value)
+    console.log(state_id)
+    console.log(count++)
     city_str = '<option value="">Select a City</option>';
     if (state_id) {
       fetch(`/states/${state_id}/cities`)
@@ -176,19 +210,23 @@
           cities.forEach(city => {
             if (city.id==selected_city)
               city_str = city_str + `<option value="${city.id}" selected>${city.name}</option>`
-            else
+            else{
               city_str = city_str + `<option value="${city.id}">${city.name}</option>`
+              console.log(city);
+              }
             const option = document.createElement('option');
             option.value = city.id;
             option.textContent = city.name;
           }
         );
         city.innerHTML = city_str
-        // city.dispatchEvent(new Event('change'));
+        console.log(city_str)
+        nested_city.innerHTML = city_str;
+        city.dispatchEvent(new Event('change'));
       })
       .catch(error => {
         console.error('Error fetching cities:', error);
-      });
+     });  
     }
   }
 
