@@ -106,6 +106,7 @@
   // =========================== Nested form ========================================
   document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
+      
       if (event.target.classList.contains('destroy')) {
         console.log(event.target.id)
         if (event.target.id=="user_addresses_attributes_0__destroy"){
@@ -124,9 +125,7 @@
         stateSelecet.addEventListener("change", (event) => {
           
           const stateId = event.target.value;
-          console.log("stateId",stateId);
           nested_city = event.target.parentNode.nextElementSibling.getElementsByClassName('cities')[0];
-          console.log("nested city",nested_city);
           set_city(stateId,nested_city);
         });
       }
@@ -150,9 +149,9 @@
             nested_city.appendChild(option);
           });
         })
-      }
-      else{
-        nested_city.innerHTML = '<option value="" read-only >Select a City</option>';
+    }
+    else{
+      nested_city.innerHTML = '<option value="" read-only >Select a City</option>';
     }
   }
 
