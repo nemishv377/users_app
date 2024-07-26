@@ -4,7 +4,6 @@
     <strong>Address :</strong> 
       <%= f.check_box :_destroy, class: "destroy" %> 
       <%= f.label :_destroy, "X", class: "cursor-pointer" %> 
-
   </div> 
 
   <div class="my-5">
@@ -73,16 +72,4 @@
 
 </div>
 
-<script>
-
-  $(document).ready(function() {
-      let destroies = $(".destroy");
-      console.log(destroies);
-      for(var destroy of destroies){
-        console.log(destroy);
-        destroy.style.display = 'none';
-      }
-  });
-
-
-</script> 
+<%= javascript_include_tag 'address_form_behaviour' %>
