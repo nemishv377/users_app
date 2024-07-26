@@ -1,8 +1,9 @@
 <div class="mx-auto md:w-2/3 w-full flex">
   <div class="mx-auto">
     <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block w-full" id="notice"><%= notice %></p>
     <% end %>
+  
 
     <table id="show_table">
       <tr>
@@ -43,6 +44,7 @@
         <% end %>
       <tfoot>
       
+
     </table>
     <div id="show_addresses" style="background-color:#0f2e0c; 
                                     max-width:150px; 
@@ -66,6 +68,21 @@
               }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
     <%= link_to "Back", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
   </div>
+
+  <% if notice.present? %>
+    <div style="display: flex;  flex-direction: column;  align-items: center;  position:relative;  top:80px">
+  <% else %>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+  <% end %>
+            
+      <% if @user.avatar.attached? %>
+        <img src="<%= (url_for(@user.avatar)) %>" alt="" width="200" height="180">
+      <% else %>
+        <img src="" alt="Please edit your profile to add a Avatar" width="200" height="180">
+      <% end %>
+      <strong>Profile Avatar</strong>
+    </div>
+
 </div>
 
 <script>
