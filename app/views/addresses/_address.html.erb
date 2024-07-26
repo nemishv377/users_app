@@ -1,0 +1,12 @@
+<tr>
+    <th><strong>Address </strong></th>
+    <td>:  <%= address.plot_no + ", " + address.society_name + ", "  + City.find_by(id: address.city_id).name + "-" + address.pincode  %></td>
+</tr>
+<tr>
+    <th>State</th>
+    <td>: <%= State.find_by(id: address.state_id).name %></td>
+</tr>
+<tr>
+    <th>City</th>
+    <td>: <%= City.find_by(id: address.city_id).name %></td>
+</tr>

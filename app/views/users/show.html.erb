@@ -26,15 +26,38 @@
         <td>:  <%= @user.hobbies.join(", ") %></td>
       </tr>
       <tr>
-        <th><strong>Address  </strong></th>
+        <th><strong>Permanent Address  </strong></th>
         <td>:  <%= @user.addresses[0].plot_no + ", " + @user.addresses[0].society_name + ", "  + City.find_by(id: @user.addresses[0].city_id).name + "-" + @user.addresses[0].pincode  %></td>
       </tr>
       <tr>
-        <th><strong>State  </strong></th>
+        <th>State</th>
         <td>: <%= State.find_by(id: @user.addresses[0].state_id).name %></td>
       </tr>
-   
+      <tr>
+        <th>City  </th>
+        <td>: <%= City.find_by(id: @user.addresses[0].city_id).name %></td>
+      </tr>
+      <tfoot id="more_addresses" style="display:none;">
+        <% @user.addresses.drop(1).each_with_index do |address, index| %>
+          <%= render address %>
+        <% end %>
+      <tfoot>
+      
     </table>
+    <div id="show_addresses" style="background-color:#0f2e0c; 
+                                    max-width:150px; 
+                                    display:flex; 
+                                    justify-content:center; 
+                                    align-items:center; 
+                                    color:white; 
+                                    padding:5px 1px 5px 1px; 
+                                    border:1px solid; 
+                                    border-radius:5px; 
+                                    margin-bottom:15px; 
+                                    font-size:12px;
+                                    font-weight:400;">
+      Show & Hide addresses
+    </div>
 
     <%= link_to "Edit", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
     <%= link_to "Delete", user_path(@user), data: {
@@ -42,7 +65,22 @@
                 turbo_confirm: "Are you sure?"
               }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
     <%= link_to "Back", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
-
-  
   </div>
 </div>
+
+<script>
+
+
+
+  $(document).ready(function() {
+      $('#show_addresses').click(function() {
+        let user_addresses = <%= raw @user.addresses.to_json %>
+        console.log(user_addresses.length);
+        if (user_addresses.length>1)
+          $("#more_addresses").toggle()
+        else
+          alert("You have only one address.")
+      });
+    });
+  
+</script>
