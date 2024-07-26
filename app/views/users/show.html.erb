@@ -25,9 +25,12 @@
         <th><strong>Hobby  </strong></th>
         <td>:  <%= @user.hobbies.join(", ") %></td>
       </tr>
+      <% default_address = @user.addresses.find_by(default: true) %>
+      <% if default_address %>
       <tr>
         <th><strong>Permanent Address  </strong></th>
-        <td>:  <%= @user.addresses[0].plot_no + ", " + @user.addresses[0].society_name + ", "  + City.find_by(id: @user.addresses[0].city_id).name + "-" + @user.addresses[0].pincode  %></td>
+
+        <td>:  <%= default_address.plot_no + ", " + default_address.society_name + ", "  + City.find_by(id: default_address.city_id).name + "-" + default_address.pincode  %></td>
       </tr>
       <tr>
         <th>State</th>
@@ -35,15 +38,19 @@
       </tr>
       <tr>
         <th>City  </th>
-        <td>: <%= City.find_by(id: @user.addresses[0].city_id).name %></td>
+        <td>: <%= City.find_by(id: default_address.city_id).name %></td>
       </tr>
+      <% end %>
+
       <tfoot id="more_addresses" style="display:none;">
-        <% @user.addresses.drop(1).each_with_index do |address, index| %>
+        <% user_addresses = @user.addresses.where(default: false) %>
+        <% user_addresses.each do |address| %>
           <%= render address %>
         <% end %>
       <tfoot>
 
     </table>
+    <% if user_addresses.length>0 %>
     <div id="show_addresses" style="background-color:#0f2e0c; 
                                     max-width:150px; 
                                     display:flex; 
@@ -58,6 +65,7 @@
                                     font-weight:400;">
       Show & Hide addresses
     </div>
+    <% end %>
 
     <%= link_to "Edit", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
     <%= link_to "Delete", user_path(@user), data: {
@@ -89,7 +97,7 @@
       $('#show_addresses').click(function() {
         let user_addresses = <%= raw @user.addresses.to_json %>
         console.log(user_addresses.length);
-        if (user_addresses.length>1)
+        if (user_addresses.length>0)
           $("#more_addresses").toggle()
         else
           alert("You have only one address.")

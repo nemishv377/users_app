@@ -6,6 +6,7 @@
       <%= f.label :_destroy, "X", class: "cursor-pointer" %> 
   </div> 
 
+
   <div class="my-5">
     <div class="field_label">
       <%= f.label :plot_no, "Plot No."%><small>*</small>
@@ -70,6 +71,14 @@
     </div>
   </div>
 
+  <div>
+  <%= f.check_box :default, class: "set-default-checkbox" %>
+  <%= f.label :default, "Set as default address" %>
+      <% f.object.errors[:default].each do |message| %>
+        <div class="text-red-500 font-medium rounded"><%= message %></div>
+        <% break %>
+      <% end %>
+  </div>
 </div>
 
 <%= javascript_include_tag 'address_form_behaviour' %>
