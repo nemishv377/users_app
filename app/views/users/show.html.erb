@@ -1,8 +1,9 @@
 <div class="mx-auto md:w-2/3 w-full flex">
   <div class="mx-auto">
     <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block w-full" id="notice"><%= notice %></p>
     <% end %>
+  
 
     <table id="show_table">
       <tr>
@@ -33,7 +34,7 @@
         <th><strong>State  </strong></th>
         <td>: <%= State.find_by(id: @user.addresses[0].state_id).name %></td>
       </tr>
-   
+
     </table>
 
     <%= link_to "Edit", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
@@ -45,4 +46,19 @@
 
   
   </div>
+
+  <% if notice.present? %>
+    <div style="display: flex;  flex-direction: column;  align-items: center;  position:relative;  top:80px">
+  <% else %>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+  <% end %>
+            
+      <% if @user.avatar.attached? %>
+        <img src="<%= (url_for(@user.avatar)) %>" alt="" width="200" height="180">
+      <% else %>
+        <img src="" alt="Please edit your profile to add a Avatar" width="200" height="180">
+      <% end %>
+      <strong>Profile Avatar</strong>
+    </div>
+
 </div>

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_one_attached :avatar
   has_many :addresses ,dependent: :destroy
   serialize :hobbies, Array, coder: YAML
   accepts_nested_attributes_for :addresses, allow_destroy: true
@@ -15,6 +16,14 @@ class User < ApplicationRecord
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :gender, presence: true, inclusion: { in: VALID_GENDERS, message: "%{value} is not a valid gender" }
   validates :hobbies, presence: true, inclusion: { in: VALID_HOBBIES, message: "%{value} is not a valid Hobby." }
+  validate :profile_avatar_content_type
+
+
+  def profile_avatar_content_type
+    if avatar.attached? && !avatar.content_type.in?(%w(image/jpeg image/png))
+      errors.add(:avatar, 'must be a JPEG or PNG')
+    end
+  end
 
 
 end
