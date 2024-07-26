@@ -4,7 +4,6 @@
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block w-full" id="notice"><%= notice %></p>
     <% end %>
   
-
     <table id="show_table">
       <tr>
         <th><strong>First name </strong></th>
@@ -43,7 +42,6 @@
           <%= render address %>
         <% end %>
       <tfoot>
-      
 
     </table>
     <div id="show_addresses" style="background-color:#0f2e0c; 
@@ -78,7 +76,7 @@
       <% if @user.avatar.attached? %>
         <img src="<%= (url_for(@user.avatar)) %>" alt="" width="200" height="180">
       <% else %>
-        <img src="" alt="Please edit your profile to add a Avatar" width="200" height="180">
+        <img src="" alt="Please upload your profile to add a Avatar" width="200" height="180">
       <% end %>
       <strong>Profile Avatar</strong>
     </div>
@@ -86,8 +84,6 @@
 </div>
 
 <script>
-
-
 
   $(document).ready(function() {
       $('#show_addresses').click(function() {
