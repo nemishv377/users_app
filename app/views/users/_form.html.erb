@@ -6,9 +6,10 @@
         <strong><%= form.label :first_name %></strong> <small>*</small>
       </div>
       <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "First name" %>
-      <% user.errors.full_messages_for(:first_name).each do |message| %>
-        <div class="text-red-500 font-medium rounded "><%= message %></div>
-        <% break %>
+      <% if user.errors.full_messages_for(:first_name) %>
+        <div class="text-red-500 font-medium rounded ">
+          <%= user.errors.full_messages_for(:first_name)[0] %>
+        </div>
       <% end %>
     </div>
   
@@ -17,9 +18,10 @@
         <strong><%= form.label :last_name %></strong> <small>*</small>
       </div>
       <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "Last name"%>
-      <% user.errors.full_messages_for(:last_name).each do |message| %>
-        <div class="text-red-500 font-medium rounded"><%= message %></div>
-        <% break %>
+      <% if user.errors.full_messages_for(:last_name) %>
+        <div class="text-red-500 font-medium rounded ">
+          <%= user.errors.full_messages_for(:last_name)[0] %>
+        </div>
       <% end %>
     </div>
   </div>
@@ -29,9 +31,10 @@
       <strong><%= form.label :email %> </strong><small>*</small>
     </div>
     <%= form.text_field :email, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "abcd@gmail.com"  %>
-    <% user.errors.full_messages_for(:email).each do |message| %>
-      <div class="text-red-500 font-medium rounded"><%= message %></div>
-      <% break %>
+    <% if user.errors.full_messages_for(:email) %>
+      <div class="text-red-500 font-medium rounded ">
+        <%= user.errors.full_messages_for(:email)[0] %>
+      </div>
     <% end %>
   </div>
 
@@ -50,18 +53,19 @@
         <%= form.radio_button :gender, "Other" %>&nbsp;
         <%= form.label :gender_other, "Other" %>
       </div>
-      </div>
+    </div>
   </div>
-      <% user.errors.full_messages_for(:gender).each do |message| %>
-        <div class="text-red-500  font-medium rounded mb-7"><%= message %></div>
-        <% break %>
-      <% end %>
+  <% if user.errors.full_messages_for(:gender) %>
+    <div class="text-red-500 font-medium rounded ">
+      <%= user.errors.full_messages_for(:gender)[0] %>
+    </div>
+  <% end %>
 
   <div class="my-5" id="field">
     <strong>Hobbies</strong><small>*</small>
     <div id="field_div">
       <div>
-        <%= form.check_box :hobbies, { multiple: true }, "reading", nil  %>&nbsp; 
+        <%= form.check_box :hobbies, { multiple: true }, "reading", nil %>&nbsp; 
         <%= form.label :hobbies_reading, "Reading" %> 
       </div>
       <div>
@@ -74,9 +78,10 @@
       </div>
     </div>
   </div>
-  <% user.errors.full_messages_for(:hobbies).each do |message| %>
-    <div class="text-red-500 font-medium rounded "><%= message %></div>
-    <% break %>
+  <% if user.errors.full_messages_for(:hobbies) %>
+    <div class="text-red-500 font-medium rounded ">
+      <%= user.errors.full_messages_for(:hobbies)[0] %>
+    </div>
   <% end %>
   
   <%# ============================ Nested address form ==================================== %>

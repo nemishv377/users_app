@@ -25,16 +25,9 @@
         <th>Delete</th>
       </tr>
 
-    <% @users.each do |user| %>
-      <%= render user %>
-    <% end %>
+      <% @users.each do |user| %>
+        <%= render user %>
+      <% end %>
     </table>
   </div>
 </div>
-
-<script>
-  $(document).ready(function() {
-    console.log($('#index_page_table').html)
-});
-  
-</script>
