@@ -1,17 +1,23 @@
-  // =========================== Nested form ========================================
+// =========================== Nested form ========================================
+total_address = 1
 document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('click', function(event) {
     const destroy_address = event.target
     if (destroy_address.classList.contains('destroy')) {
-      if (destroy_address.id=="user_addresses_attributes_0__destroy"){
+      if (total_address<2){
         destroy_address.value = 0;
-        alert("You should not remove your address!");
+        alert("You should add atleast one address!");
       }
       else{
         destroy_address.value = 1;
         destroy_add = destroy_address.parentNode.parentNode;
         destroy_add.style.display = 'none';
+        total_address -= 1
       }
+    }
+
+    if(event.target.classList.contains('add_fields')){
+      total_address += 1
     }
 
 // =========================== Nested state and city ========================================
