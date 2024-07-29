@@ -90,7 +90,7 @@
     <%= render 'address_fields', f: address_form, user: user %>
   <% end %>
   <div class="rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium cursor-pointer" >
-    <%= link_to_add_association "+Add address", form, :addresses, render_options:  {locals: { user: user }}  %>
+    <%= link_to_add_association "+Add address", form, :addresses, render_options: {locals: { user: user }}  %>
   </div>
    
   <%# ============================ Nested address form ==================================== %>
