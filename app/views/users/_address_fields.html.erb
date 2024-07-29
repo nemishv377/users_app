@@ -6,7 +6,6 @@
       <%= f.label :_destroy, "X", class: "cursor-pointer" %> 
   </div> 
 
-
   <div class="my-5">
     <div class="field_label">
       <%= f.label :plot_no, "Plot No."%><small>*</small>
@@ -58,11 +57,12 @@
       <% end %>
     </div>
   </div>
+
   <div class="my-5">
     <div class="field_label">
       <%= f.label :city_id, "City"%><small>*</small>
     </div>
-    <%= f.select :city_id , f.object.state_id ? City.where(state_id: f.object.state_id).order(:name).pluck(:name, :id) : [], { prompt: "Select a City" }, class: "cities block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= f.select :city_id , f.object.state_id ? City.where(state_id: f.object.state_id).pluck(:name, :id) : [], { prompt: "Select a City" }, class: "cities block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
     <div class="error">
       <% f.object.errors[:city_id].each do |message| %>
         <div class="text-red-500 font-medium rounded"><%= message %></div>
@@ -73,12 +73,13 @@
 
   <div>
   <%= f.check_box :default, class: "set-default-checkbox" %>
-  <%= f.label :default, "Set as default address" %>
+  <%= f.label :default, "Set as Permanent address" %>
       <% f.object.errors[:default].each do |message| %>
         <div class="text-red-500 font-medium rounded"><%= message %></div>
         <% break %>
       <% end %>
   </div>
+  
 </div>
 
 <%= javascript_include_tag 'address_form_behaviour' %>
