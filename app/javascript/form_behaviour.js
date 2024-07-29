@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    if(event.target.classList.contains('add_fields')){
+    if(event.target.classList.contains('add_fields'))
       total_address += 1
-    }
+    
 
 // =========================== Nested state and city ========================================
     document.querySelectorAll('.states').forEach(stateSelecet => {
