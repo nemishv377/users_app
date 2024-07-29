@@ -1,5 +1,4 @@
 // =========================== Nested form ========================================
-total_address = 1
 document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('click', function(event) {
     const destroy_address = event.target
