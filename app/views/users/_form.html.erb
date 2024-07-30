@@ -1,4 +1,3 @@
-
 <%= form_with(model: user, class: "contents", name: "login-form") do |form| %>
   <div id="fullname">
     <div class="my-5 name">
@@ -65,15 +64,15 @@
     <strong>Hobbies</strong><small>*</small>
     <div id="field_div">
       <div>
-        <%= form.check_box :hobbies, { multiple: true }, "reading", nil %>&nbsp; 
+        <%= form.check_box :hobbies, { multiple: true }, "Reading", nil %>&nbsp; 
         <%= form.label :hobbies_reading, "Reading" %> 
       </div>
       <div>
-        <%= form.check_box :hobbies, { multiple: true }, "travelling", nil %>&nbsp;  
+        <%= form.check_box :hobbies, { multiple: true }, "Travelling", nil %>&nbsp;  
         <%= form.label :hobbies_travelling, "Travelling" %> 
       </div>
       <div>
-        <%= form.check_box :hobbies, { multiple: true }, "photography", nil %>&nbsp; 
+        <%= form.check_box :hobbies, { multiple: true }, "Photography", nil %>&nbsp; 
         <%= form.label :hobbies_photography, "Photography" %> 
       </div>
     </div>
@@ -109,7 +108,6 @@
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
   </div>
 <% end %>
-
 
 
 <script>
