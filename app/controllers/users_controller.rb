@@ -3,11 +3,12 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.all
+    @users = User.includes(addresses: [:state, :city]).all  
   end
 
   # GET /users/1 or /users/1.json
   def show
+    @default_address = @user.addresses.default.first
   end
 
   # GET /users/new
@@ -19,7 +20,6 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user.build_address if @user.addresses.nil?
-    puts @user.addresses
   end
 
   # POST /users or /users.json
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      @user = User.includes(addresses: [:state, :city]).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

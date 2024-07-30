@@ -17,6 +17,7 @@
 small{ 
    color: red;
 }
+
 #fullname{
    display: flex;
    width: 90%;
@@ -41,17 +42,15 @@ small{
   display: flex;
 }
 
- #field{
+#field{
    display: flex;
    align-items: center;
    margin: 25px 0;
    margin-bottom: 0;
    padding: 0;
- }
+}
 
- 
-#field_div
-{
+#field_div{
    display: flex;
    width: 40%;
    align-items: center;
@@ -76,17 +75,18 @@ small{
 #index_page_table tr:hover{
    background-color: antiquewhite;
 }
-#index_page_table td{
 
+#index_page_table td{
    text-align: center;
 }
+
 #index_page_table th{
    background: slategray;
    font-size: large;
    color: rgb(248, 243, 243);  
- }
+}
 
- #show_table tr{
+#show_table tr{
    height: 50px;
    font-size: larger;
 }

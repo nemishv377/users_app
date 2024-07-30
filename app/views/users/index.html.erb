@@ -26,7 +26,8 @@
       </tr>
 
       <% @users.each do |user| %>
-        <%= render user %>
+        <% default_address =  user.addresses.detect(&:default) %>
+        <%= render partial: 'user', locals: { user: user, default_address: default_address } %>
       <% end %>
     </table>
   </div>
