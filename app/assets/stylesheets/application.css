@@ -12,6 +12,7 @@
  *
  *= require_tree .
  *= require_self
+ *= require pagy
  */
 
 small{ 
@@ -98,4 +99,15 @@ small{
 #show_table th{
    text-align: left;
    font-weight: 400;
+ }
+
+ .pag-bar{
+   display: flex;
+   justify-content: end;
+ }
+ .pagy {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    min-width: 10%;
  }
