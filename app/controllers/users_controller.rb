@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.includes(addresses: [:state, :city]).all  
+    @pagy, @users = pagy(User.includes(addresses: [:state, :city]).all)  
   end
 
   # GET /users/1 or /users/1.json
