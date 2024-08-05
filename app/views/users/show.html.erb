@@ -7,12 +7,8 @@
   
     <table id="show_table">
       <tr>
-        <th><strong>First name </strong></th>
-        <td>: <%= @user.first_name %></td>
-      </tr>
-      <tr>
-        <th><strong>Last name  </strong></th>
-        <td>: <%= @user.last_name %></td>
+        <th><strong>Name </strong></th>
+        <td>: <%= @user.full_name %></td>
       </tr>
       <tr>
         <th><strong>Email </strong></th>
@@ -25,9 +21,7 @@
       <tr>
         <th><strong>Hobby  </strong></th>
         <td>:  <%= @user.hobbies.join(", ") %></td>
-      </tr>
-
-      
+      </tr>   
       
       <% if @default_address %>
         <tr>
@@ -83,8 +77,12 @@
     <div style="display: flex; flex-direction: column; align-items: center;">
   <% end %>
             
+      
+      <p>Joined on : <%= @user.formatted_join_date %> </p>
+      
       <% if @user.avatar.attached? %>
         <img src="<%= (url_for(@user.avatar)) %>" alt="" width="200" height="180">
+        <%= link_to "Download image", rails_blob_path(@user.avatar, disposition: "attachment") %>
       <% else %>
         <img src="" alt="Please upload your Profile Avatar" width="200" height="180">
       <% end %>
