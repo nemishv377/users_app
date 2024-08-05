@@ -9,6 +9,7 @@ gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 gem "sprockets-rails"
 gem "cocoon"
 gem "pagy"
+gem 'draper'
 
 # gem "nested_form"
 
