@@ -12,12 +12,12 @@
       <td class="my-5"> <%= default_address.state.name %>  </td>
       <td class="my-5"> <%= default_address.city.name %> </td>
     <% else %>
-      <td class="my-5"> <%= user.addresses.first.state.name %>  </td>
-      <td class="my-5"> <%= user.addresses.first.city.name %> </td>
+      <td class="my-5"> <%= '' || user.addresses.first.state.name %>  </td>
+      <td class="my-5"> <%= '' || user.addresses.first.city.name %> </td>
     <% end %>
 
     <td> <%= link_to "Show", user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-gray-300 inline-block font-medium" %> </td>
-    <td> <%= link_to "Edit", edit_user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-teal-200 inline-block font-medium" %> </td>
+    <td> <%= link_to "Edit", edit_user_registration_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-teal-200 inline-block font-medium" %> </td>
     <td>
       <%= link_to "Delete", user_path(user), data: {
                   turbo_method: :delete,
