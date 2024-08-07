@@ -1,0 +1,13 @@
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+    
+  <%= render "form", user: @user, form: form %>
+
+  <div class="actions">
+    <%= form.submit "Sign up", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>

@@ -69,7 +69,7 @@
       </div>
     <% end %>
 
-    <%= link_to "Edit", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
+    <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
     <%= link_to "Delete", user_path(@user), data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
