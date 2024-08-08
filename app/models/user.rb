@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  rolify
+  after_create :assign_default_role
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -26,5 +29,11 @@ class User < ApplicationRecord
     return unless avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
 
     errors.add(:avatar, 'must be a JPEG or PNG')
+  end
+
+  private
+
+  def assign_default_role
+    add_role(:student) if roles.blank?
   end
 end
