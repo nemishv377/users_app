@@ -1,19 +1,24 @@
 <div class="w-full">
   
-  <% if user_signed_in? %> 
- 
+  <% if user_signed_in? and !current_user.has_role? :admin %>
     <%= render "show", user: current_user %>
-    
+  
   <% else %>
     <% if notice.present? %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
     <% content_for :title, "Users" %>
     <div class="flex justify-between items-center">
-      <h1 class="font-bold text-4xl">Users</h1>
-      <%= link_to "New user", new_user_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
+      <h1 class="font-bold text-4xl">All Users</h1>
+      <div class="flex flex-col items-end">
+        <div ><strong> Welcome <%= current_user.email %> </strong></div> 
+        <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "mt-2 rounded-lg py-2 px-3 bg-red-500 font-medium text-white" %>
+        <%= link_to "See Your Profile", user_path(current_user), class: "mt-2 rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium" %>
+        <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-2 px-5 bg-teal-300 inline-block font-medium" %>
+      </div>
+      <%# link_to "New user", new_user_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
     </div>
-
+  
     <div id="users" class="min-w-full">
       <table id="index_page_table" style="width:100%; border:1px solid; margin-top:50px;">
         <tr>
@@ -25,12 +30,11 @@
           <th>State </th>
           <th>City</th>
           <th>Show</th>
-          <th>Modify</th>
           <th>Delete</th>
         </tr>
         <% @users.each do |user| %>
           <% default_address =  user.addresses.detect(&:default) %>
-          <% user_addresses = user.addresses.includes(:state, :city).except_default %>
+          <% user_addresses = user.addresses.reject(&:default) %>
           <%= render partial: 'user', locals: { user: user, default_address: default_address, user_addresses: user_addresses } %>
         <% end %>
       </table>
@@ -38,6 +42,5 @@
         <%== pagy_bootstrap_nav(@pagy) %>
       </div>
     </div>
-    <%= button_to "Sign in", new_user_session_path %> 
   <% end %>
 </div>

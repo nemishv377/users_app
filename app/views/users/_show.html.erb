@@ -1,6 +1,5 @@
-<div class="mx-auto md:w-2/3 w-full flex">
-  <% @default_address = user.addresses.default.first %>
-  <div class="mx-auto">
+<div class="mx-auto md:w-2/3 w-full flex justify-between">
+  <div class="">
     <% if notice.present? %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p> 
     <% end %>
@@ -42,7 +41,7 @@
       <% end %>
 
       <tfoot id="more_addresses" style="display:none;">
-        <% user_addresses = user.addresses.includes(:state, :city).except_default %>
+        <% user_addresses = user.addresses.reject(&:default) %>
         <% user_addresses.each do |address| %>
           <%= render address %>
         <% end %>
@@ -50,28 +49,19 @@
 
     </table>
     <% if user_addresses.length>0 %>
-      <div id="show_addresses" style="background-color:#0f2e0c; 
-                                      max-width:150px; 
-                                      display:flex; 
-                                      justify-content:center; 
-                                      align-items:center; 
-                                      color:white; 
-                                      padding:5px 1px 5px 1px; 
-                                      border:1px solid; 
-                                      border-radius:5px; 
-                                      margin-bottom:15px; 
-                                      font-size:12px;
-                                      font-weight:400;">
-        Show & Hide addresses
-      </div>
+      <div id="show_addresses"> Show & Hide addresses </div>
     <% end %>
 
-    <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
+    <% if !current_user.has_role? :admin %>
+      <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
+    
     <%= link_to "Delete", user_path(user), data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
-              }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
-    <%# link_to "See all Users", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
+              }, class: "rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
+    <% else %>
+      <%= link_to "Back", users_path, class: "rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
+    <% end %>
   </div>
 
 
@@ -84,8 +74,8 @@
     <strong>Profile Avatar</strong>
   </div>
 
-  <div><strong><%= current_user.email %> </strong>
-    <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %> 
+  <div class="ml-5 flex flex-col items-end"><strong><%= current_user.email %> </strong>
+    <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "rounded-lg py-2 px-3 bg-red-500 font-medium text-white" %> 
   </div> 
 
 </div>
