@@ -8,7 +8,7 @@
 
     <div class="my-5">
         <div class="field_label">
-            <%= f.label :plot_no, "Plot No." %><small>*</small>
+            <%= f.label :plot_no, "Plot No." %><small><sup>*</sup></small>
         </div>
         <%= f.text_field :plot_no, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" , placeholder: "Ex:- 123/A123" %>
         <div class="error">
@@ -23,7 +23,7 @@
 
     <div class="my-5">
         <div class="field_label">
-            <%= f.label :society_name, "Society name" %><small>*</small>
+            <%= f.label :society_name, "Society name" %><small><sup>*</sup></small>
         </div>
         <%= f.text_field :society_name , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
         <div class="error">
@@ -38,7 +38,7 @@
 
     <div class="my-5">
         <div class="field_label">
-            <%= f.label :pincode, "Pincode" %><small>*</small>
+            <%= f.label :pincode, "Pincode" %><small><sup>*</sup></small>
         </div>
         <%= f.text_field :pincode , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
         <div class="error">
@@ -53,46 +53,46 @@
 
     <div class="my-5">
         <div class="field_label">
-            <%= f.label :state_id, "State" %><small>*</small>
+            <%= f.label :state_id, "State" %><small><sup>*</sup></small>
         </div>
         <%= f.select :state_id, State.all.order(:name).pluck(:name, :id), { prompt: "Select a State" },
             class: "states block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-            <div class="error">
-                <% f.object.errors[:state_id].each do |message| %>
-                    <div class="text-red-500 font-medium rounded">
-                        <%= message %>
-                    </div>
-                    <% break %>
-                        <% end %>
-            </div>
+        <div class="error">
+            <% f.object.errors[:state_id].each do |message| %>
+                <div class="text-red-500 font-medium rounded">
+                    <%= message %>
+                </div>
+                <% break %>
+            <% end %>
+        </div>
     </div>
 
     <div class="my-5">
         <div class="field_label">
-            <%= f.label :city_id, "City" %><small>*</small>
+            <%= f.label :city_id, "City" %><small><sup>*</sup></small>
         </div>
         <%= f.select :city_id , f.object.state_id ? City.where(state_id: f.object.state_id).pluck(:name, :id) : [], {
             prompt: "Select a City" },
             class: "cities block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-            <div class="error">
-                <% f.object.errors[:city_id].each do |message| %>
-                    <div class="text-red-500 font-medium rounded">
-                        <%= message %>
-                    </div>
-                    <% break %>
-                        <% end %>
-            </div>
+        <div class="error">
+            <% f.object.errors[:city_id].each do |message| %>
+                <div class="text-red-500 font-medium rounded">
+                    <%= message %>
+                </div>
+                <% break %>
+                    <% end %>
+        </div>
     </div>
 
     <div>
         <%= f.check_box :default, class: "set-default-checkbox" %>
-            <%= f.label :default, "Set as Permanent address" %>
-                <% f.object.errors[:default].each do |message| %>
-                    <div class="text-red-500 font-medium rounded">
-                        <%= message %>
-                    </div>
-                    <% break %>
-                        <% end %>
+        <%= f.label :default, "Set as Permanent address" %>
+        <% f.object.errors[:default].each do |message| %>
+            <div class="text-red-500 font-medium rounded">
+                <%= message %>
+            </div>
+            <% break %>
+        <% end %>
     </div>
 
 </div>

@@ -1,33 +1,30 @@
 <div class="mx-auto md:w-2/3 w-full flex">
-  
+  <% @default_address = user.addresses.default.first %>
   <div class="mx-auto">
     <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p> 
     <% end %>
-  
     <table id="show_table">
       <tr>
         <th><strong>First name </strong></th>
-        <td>: <%= @user.first_name %></td>
+        <td>: <%= user.first_name %></td>
       </tr>
       <tr>
         <th><strong>Last name  </strong></th>
-        <td>: <%= @user.last_name %></td>
+        <td>: <%= user.last_name %></td>
       </tr>
       <tr>
         <th><strong>Email </strong></th>
-        <td>: <%= @user.email %></td>
+        <td>: <%= user.email %></td>
       </tr>
       <tr>
         <th><strong>Gender  </strong></th>
-        <td>: <%= @user.gender %></td>
+        <td>: <%= user.gender %></td>
       </tr>
       <tr>
         <th><strong>Hobby  </strong></th>
-        <td>:  <%= @user.hobbies.join(", ") %></td>
+        <td>:  <%= user.hobbies.join(", ") %></td>
       </tr>
-
-      
       
       <% if @default_address %>
         <tr>
@@ -45,7 +42,7 @@
       <% end %>
 
       <tfoot id="more_addresses" style="display:none;">
-        <% user_addresses = @user.addresses.includes(:state, :city).except_default %>
+        <% user_addresses = user.addresses.includes(:state, :city).except_default %>
         <% user_addresses.each do |address| %>
           <%= render address %>
         <% end %>
@@ -70,34 +67,34 @@
     <% end %>
 
     <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
-    <%= link_to "Delete", user_path(@user), data: {
+    <%= link_to "Delete", user_path(user), data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
               }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
-    <%= link_to "Back", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
+    <%# link_to "See all Users", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
   </div>
 
-  <% if notice.present? %>
-    <div style="display: flex;  flex-direction: column;  align-items: center;  position:relative;  top:80px">
-  <% else %>
-    <div style="display: flex; flex-direction: column; align-items: center;">
-  <% end %>
-            
-      <% if @user.avatar.attached? %>
-        <img src="<%= (url_for(@user.avatar)) %>" alt="" width="200" height="180">
-      <% else %>
-        <img src="" alt="Please upload your Profile Avatar" width="200" height="180">
-      <% end %>
-      <strong>Profile Avatar</strong>
-    </div>
+
+  <div style="display: flex; flex-direction: column; align-items: center;">  
+    <% if user.avatar.attached? %>
+      <img src="<%= (url_for(user.avatar)) %>" alt="" width="200" height="180">
+    <% else %>
+      <img src="" alt="Please upload your Profile Avatar" width="200" height="180">
+    <% end %>
+    <strong>Profile Avatar</strong>
+  </div>
+
+  <div><strong><%= current_user.email %> </strong>
+    <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %> 
+  </div> 
 
 </div>
 
 <script>
-
+  
   $(document).ready(function() {
     $('#show_addresses').click(function() {
-      let user_addresses = <%= raw @user.addresses.to_json %>
+      let user_addresses = <%= raw user.addresses.to_json %>
       $("#more_addresses").toggle();
     });
   });

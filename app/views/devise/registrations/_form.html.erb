@@ -1,123 +1,105 @@
-
-  <div id="fullname">
-    <div class="my-5 name">
-      <div class="field_label">
-        <strong><%= form.label :first_name %></strong> <small>*</small>
-      </div>
-      <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "First name" %>
-      <% if user.errors.full_messages_for(:first_name) %>
-        <div class="text-red-500 font-medium rounded ">
-          <%= user.errors.full_messages_for(:first_name)[0] %>
-        </div>
-      <% end %>
-    </div>
-  
-    <div class="my-5 name">
-      <div class="field_label">
-        <strong><%= form.label :last_name %></strong> <small>*</small>
-      </div>
-      <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "Last name"%>
-      <% if user.errors.full_messages_for(:last_name) %>
-        <div class="text-red-500 font-medium rounded ">
-          <%= user.errors.full_messages_for(:last_name)[0] %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="my-5 email">
+<div id="fullname">
+  <div class="my-5 name">
     <div class="field_label">
-      <strong><%= form.label :email %> </strong><small>*</small>
+      <strong><%= form.label :first_name %></strong> <small><sup>*</sup></small>
     </div>
-    <%= form.text_field :email, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "abcd@gmail.com"  %>
-    <% if user.errors.full_messages_for(:email) %>
+    <%= form.text_field :first_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "First name" %>
+    <% if user.errors.full_messages_for(:first_name) %>
       <div class="text-red-500 font-medium rounded ">
-        <%= user.errors.full_messages_for(:email)[0] %>
+        <%= user.errors.full_messages_for(:first_name)[0] %>
       </div>
     <% end %>
   </div>
 
-  <div class="my-5" id="field">
-    <strong>Gender</strong><small>*</small>
-    <div id="field_div">
-      <div>
-        <%= form.radio_button :gender, "Male" %>&nbsp;
-        <%= form.label :gender_male, "Male" %>
-      </div>
-      <div>
-        <%= form.radio_button :gender, "Female" %>&nbsp;
-        <%= form.label :gender_female, "Female" %>
-      </div>
-      <div>
-        <%= form.radio_button :gender, "Other" %>&nbsp;
-        <%= form.label :gender_other, "Other" %>
-      </div>
+  <div class="my-5 name">
+    <div class="field_label">
+      <strong><%= form.label :last_name %></strong><small><sup>*</sup></small>
     </div>
-  </div>
-  <% if user.errors.full_messages_for(:gender) %>
-    <div class="text-red-500 font-medium rounded ">
-      <%= user.errors.full_messages_for(:gender)[0] %>
-    </div>
-  <% end %>
-
-  <div class="my-5" id="field">
-    <strong>Hobbies</strong><small>*</small>
-    <div id="field_div">
-      <div>
-        <%= form.check_box :hobbies, { multiple: true }, "Reading", nil %>&nbsp; 
-        <%= form.label :hobbies_reading, "Reading" %> 
-      </div>
-      <div>
-        <%= form.check_box :hobbies, { multiple: true }, "Travelling", nil %>&nbsp;  
-        <%= form.label :hobbies_travelling, "Travelling" %> 
-      </div>
-      <div>
-        <%= form.check_box :hobbies, { multiple: true }, "Photography", nil %>&nbsp; 
-        <%= form.label :hobbies_photography, "Photography" %> 
-      </div>
-    </div>
-  </div>
-  <% if user.errors.full_messages_for(:hobbies) %>
-    <div class="text-red-500 font-medium rounded ">
-      <%= user.errors.full_messages_for(:hobbies)[0] %>
-    </div>
-  <% end %>
-  
-  <div class="my-5">
-    <%= form.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= form.password_field :password, autocomplete: "new-password", class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :password_confirmation %><br />
-    <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-  
-  <%# ============================ Nested address form ==================================== %>
-  
-  <%= form.fields_for :addresses do |address_form| %>
-    <%= render 'address_fields', f: address_form, user: user %>
-  <% end %>
-  <div class="my-5 rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium cursor-pointer" >
-    <%= link_to_add_association "+Add address", form, :addresses, render_options: {locals: { user: user }}  %>
-  </div>
-   
-  <%# ============================ Nested address form ==================================== %>
-
-
-  <div class="my-5">
-    <strong><%= form.label :avatar, "Profile Avatar" %></strong>
-    <%= form.file_field :avatar , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %> 
-    <% if user.errors[:avatar].any? %>
-      <div class="text-red-500 font-medium rounded">
-        <%= user.errors[:avatar][0] %>
+    <%= form.text_field :last_name, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-4/5" ,placeholder: "Last name"%>
+    <% if user.errors.full_messages_for(:last_name) %>
+      <div class="text-red-500 font-medium rounded ">
+        <%= user.errors.full_messages_for(:last_name)[0] %>
       </div>
     <% end %>
   </div>
+</div>
+<div class="my-5 email">
+  <div class="field_label">
+    <strong><%= form.label :email %> </strong><small><sup>*</sup></small>
+  </div>
+  <%= form.text_field :email, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", placeholder: "abcd@gmail.com"  %>
+  <% if user.errors.full_messages_for(:email) %>
+    <div class="text-red-500 font-medium rounded ">
+      <%= user.errors.full_messages_for(:email)[0] %>
+    </div>
+  <% end %>
+</div>
+<div class="my-5" id="field">
+  <strong>Gender</strong><small><sup>*</sup></small>
+  <div id="field_div">
+    <div>
+      <%= form.radio_button :gender, "Male" %>&nbsp;
+      <%= form.label :gender_male, "Male" %>
+    </div>
+    <div>
+      <%= form.radio_button :gender, "Female" %>&nbsp;
+      <%= form.label :gender_female, "Female" %>
+    </div>
+    <div>
+      <%= form.radio_button :gender, "Other" %>&nbsp;
+      <%= form.label :gender_other, "Other" %>
+    </div>
+  </div>
+</div>
+<% if user.errors.full_messages_for(:gender) %>
+  <div class="text-red-500 font-medium rounded ">
+    <%= user.errors.full_messages_for(:gender)[0] %>
+  </div>
+<% end %>
+<div class="my-5" id="field">
+  <strong>Hobbies</strong><small><sup>*</sup></small>
+  <div id="field_div">
+    <div>
+      <%= form.check_box :hobbies, { multiple: true }, "Reading", nil %>&nbsp; 
+      <%= form.label :hobbies_reading, "Reading" %> 
+    </div>
+    <div>
+      <%= form.check_box :hobbies, { multiple: true }, "Travelling", nil %>&nbsp;  
+      <%= form.label :hobbies_travelling, "Travelling" %> 
+    </div>
+    <div>
+      <%= form.check_box :hobbies, { multiple: true }, "Photography", nil %>&nbsp; 
+      <%= form.label :hobbies_photography, "Photography" %> 
+    </div>
+  </div>
+</div>
+<% if user.errors.full_messages_for(:hobbies) %>
+  <div class="text-red-500 font-medium rounded ">
+    <%= user.errors.full_messages_for(:hobbies)[0] %>
+  </div>
+<% end %>
 
+<%= render 'password', user: user, form: form %>
+
+<%# ============================ Nested address form ==================================== %>
+
+<%= form.fields_for :addresses do |address_form| %>
+  <%= render 'address_fields', f: address_form, user: user %>
+<% end %>
+<div class="rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium cursor-pointer" >
+  <%= link_to_add_association "+Add address", form, :addresses, render_options: {locals: { user: user }}  %>
+</div>
+ 
+<%# ============================ Nested address form ==================================== %>
+<div class="my-5">
+  <strong><%= form.label :avatar, "Profile Avatar" %></strong>
+  <%= form.file_field :avatar , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %> 
+  <% if user.errors[:avatar].any? %>
+    <div class="text-red-500 font-medium rounded">
+      <%= user.errors[:avatar][0] %>
+    </div>
+  <% end %>
+</div>
 
 <script>
   total_address = <%= raw user.addresses.count() %> || 1;
