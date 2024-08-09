@@ -60,14 +60,10 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.includes(addresses: [:state, :city]).find(params[:id]).decorate
-    end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(addresses: %i[state city]).find(params[:id])
+    @user = User.includes(addresses: %i[state city]).find(params[:id]).decorate
   end
 
   # Only allow a list of trusted parameters through.
