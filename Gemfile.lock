@@ -55,6 +55,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (7.1.3.4)
       activesupport (= 7.1.3.4)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     activerecord (7.1.3.4)
       activemodel (= 7.1.3.4)
       activesupport (= 7.1.3.4)
@@ -101,6 +105,13 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    draper (4.0.2)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
+      activemodel-serializers-xml (>= 1.0)
+      activesupport (>= 5.0)
+      request_store (>= 1.0)
+      ruby2_keywords
     drb (2.2.1)
     erubi (1.13.0)
     globalid (1.2.1)
@@ -241,6 +252,9 @@ GEM
     rubocop-ast (1.31.3)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
+    request_store (1.7.0)
+      rack (>= 1.4)
+    ruby2_keywords (0.0.5)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -301,6 +315,7 @@ DEPENDENCIES
   cocoon
   debug
   devise (~> 4.9)
+  draper
   importmap-rails
   jbuilder
   pagy

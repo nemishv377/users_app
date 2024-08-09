@@ -10,6 +10,8 @@ gem 'cocoon'
 gem 'pagy'
 gem 'rubocop', '~> 1.65', require: false
 gem 'sprockets-rails'
+gem "pagy"
+gem 'draper'
 
 # gem "nested_form"
 
