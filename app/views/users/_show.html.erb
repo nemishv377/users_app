@@ -1,4 +1,4 @@
-<div class="mx-auto md:w-2/3 w-full flex justify-between">
+<div class="mx-auto w-full flex justify-between">
   <div class="">
     <% if notice.present? %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p> 
@@ -6,11 +6,7 @@
     <table id="show_table">
       <tr>
         <th><strong>First name </strong></th>
-        <td>: <%= user.first_name %></td>
-      </tr>
-      <tr>
-        <th><strong>Last name  </strong></th>
-        <td>: <%= user.last_name %></td>
+        <td>: <%= user.full_name %></td>
       </tr>
       <tr>
         <th><strong>Email </strong></th>
@@ -26,9 +22,10 @@
       </tr>
       
       <% if @default_address %>
+        <% @default_address = @default_address.decorate %>
         <tr>
           <th><strong>Permanent Address  </strong></th>
-          <td>: <%= @default_address.plot_no + ", " + @default_address.society_name + ", " + @default_address.city.name  + "-" + @default_address.pincode  %></td>
+          <td>: <%= @default_address.full_address  %></td>
         </tr>
         <tr>
           <th>State</th>
@@ -64,17 +61,18 @@
     <% end %>
   </div>
 
-
   <div style="display: flex; flex-direction: column; align-items: center;">  
     <% if user.avatar.attached? %>
       <img src="<%= (url_for(user.avatar)) %>" alt="" width="200" height="180">
+      <%# link_to "Download image", rails_blob_path(user.avatar, disposition: "attachment") %>
     <% else %>
       <img src="" alt="Please upload your Profile Avatar" width="200" height="180">
     <% end %>
     <strong>Profile Avatar</strong>
+  <p>Joined on : <%= user.formatted_join_date %> </p>
   </div>
 
-  <div class="ml-5 flex flex-col items-end"><strong><%= current_user.email %> </strong>
+  <div class="ml-5 flex flex-col items-end"><strong>Welcome <%= user.full_name %> </strong>
     <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "rounded-lg py-2 px-3 bg-red-500 font-medium text-white" %> 
   </div> 
 
