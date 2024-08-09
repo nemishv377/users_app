@@ -1,8 +1,8 @@
 <div class="w-full">
   
   <% if user_signed_in? and !current_user.has_role? :admin %>
-    <% user = User.includes(addresses: %i[state city]).find_by(id: current_user.id) %>
-    <% @default_address = user.addresses.detect(&:default) %>
+    <% user = User.includes(addresses: %i[state city]).find_by(id: current_user.id).decorate %>
+    <% @default_address = user.addresses.detect(&:default).decorate %>
     <%= render partial: 'show', locals: { user: user, default_address: @default_address } %>
   
   <% else %>
@@ -13,7 +13,7 @@
     <div class="flex justify-between items-center">
       <h1 class="font-bold text-4xl">All Users</h1>
       <div class="flex flex-col items-end">
-        <div ><strong> Welcome <%= current_user.email %> </strong></div> 
+        <div ><strong> Welcome back!<br><%= current_user.decorate.full_name %> </strong></div> 
         <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "mt-2 rounded-lg py-2 px-3 bg-red-500 font-medium text-white" %>
         <%= link_to "See Your Profile", user_path(current_user), class: "mt-2 rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium" %>
         <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-2 px-5 bg-teal-300 inline-block font-medium" %>
