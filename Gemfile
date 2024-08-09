@@ -7,11 +7,10 @@ gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'cocoon'
+gem 'draper'
 gem 'pagy'
 gem 'rubocop', '~> 1.65', require: false
 gem 'sprockets-rails'
-gem "pagy"
-gem 'draper'
 
 # gem "nested_form"
 
@@ -50,8 +49,8 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
-gem 'pry-rails'
 gem 'bullet', group: 'development'
+gem 'pry-rails'
 # gem "jquery-rails"
 # gem "sassc-rails"
 
