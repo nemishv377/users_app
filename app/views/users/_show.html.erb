@@ -6,7 +6,7 @@
     <table id="show_table">
       <tr>
         <th><strong>First name </strong></th>
-        <td>: <%= user.full_name %></td>
+        <td>: <%= user.full_name %> <%= user.delay.full_name(user.id) %></td>
       </tr>
       <tr>
         <th><strong>Email </strong></th>
