@@ -73,5 +73,6 @@ group :development do
   # gem "spring"
 end
 
+gem 'cancancan'
 gem 'devise', '~> 4.9'
 gem 'rolify'

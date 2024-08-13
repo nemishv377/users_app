@@ -2,6 +2,8 @@
   <div class="">
     <% if notice.present? %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p> 
+    <% elsif alert.present? %>
+      <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p> 
     <% end %>
     <table id="show_table">
       <tr>
@@ -50,14 +52,14 @@
     <% end %>
 
     <% if !current_user.has_role? :admin %>
-      <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
+      <%= link_to "Edit", edit_user_registration_path(user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
     
     <%= link_to "Delete", user_path(user), data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
               }, class: "rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
     <% else %>
-      <%= link_to "Back", users_path, class: "rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
+      <%= link_to "Back", root_path, class: "rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
     <% end %>
   </div>
 
