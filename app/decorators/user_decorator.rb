@@ -7,11 +7,8 @@ class UserDecorator < Draper::Decorator
   #
 
   def full_name
-    return 'Guest' if user.nil?
-
     "#{object.first_name} #{object.last_name}"
   end
-  handle_asynchronously :full_name, run_at: proc { 5.seconds.from_now }
 
   def formatted_join_date
     content_tag(:span, object.created_at.strftime('%B %d, %Y'), class: 'join-date')
