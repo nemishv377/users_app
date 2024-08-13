@@ -36,8 +36,4 @@ class User < ApplicationRecord
   def assign_default_role
     add_role(:student) if roles.blank?
   end
-
-  def full_name
-    "#{first_name} #{last_name}".titleize
-  end
 end
