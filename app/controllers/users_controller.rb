@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show edit update]
+  before_action :set_user, only: %i[show edit update destroy]
   load_and_authorize_resource
 
   # GET /users or /users.json
@@ -11,6 +11,7 @@ class UsersController < ApplicationController
   # GET /users/1 or /users/1.json
   def show
     @default_address = @user.addresses.default.first
+    # Rails.logger.debug "Current user ID: #{current_user.id}, Attempting to authorize user ID: #{@user.id}"
   end
 
   # GET /users/new
@@ -53,7 +54,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @user.destroy! || current_user.destroy!
+    @user.destroy!
     respond_to do |format|
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +65,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(addresses: %i[state city]).find(params[:id]).decorate
+    @user = User.find(params[:id]).decorate
   end
 
   # Only allow a list of trusted parameters through.
