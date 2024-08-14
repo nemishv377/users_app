@@ -74,5 +74,8 @@ group :development do
 end
 
 gem 'cancancan'
+gem 'daemons'
+gem 'delayed_job_active_record'
 gem 'devise', '~> 4.9'
+gem 'letter_opener'
 gem 'rolify'

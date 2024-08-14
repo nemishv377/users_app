@@ -2,7 +2,10 @@
   
   <% if user_signed_in? and !current_user.has_role? :admin %>
     <% user = User.includes(addresses: %i[state city]).find_by(id: current_user.id).decorate %>
-    <% @default_address = user.addresses.detect(&:default).decorate %>
+    <% @default_address = user.addresses.detect(&:default) %>
+    <% if !@default_address.nil?  %>
+      <% @default_address = @default_address.decorate %>
+    <% end %>
     <%= render partial: 'show', locals: { user: user, default_address: @default_address } %>
   
   <% else %>
