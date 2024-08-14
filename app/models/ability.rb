@@ -8,11 +8,10 @@ class Ability
     #
     return unless user.present?
 
-    can :destroy, User, id: user.id
-    can :read, User, id: user.id
+    can :manage, User, id: user.id
     return unless user.has_role? :admin
 
-    can %i[read destroy], :all
+    can :manage, :all
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.
