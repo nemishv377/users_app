@@ -73,6 +73,8 @@ group :development do
   # gem "spring"
 end
 
+gem 'daemons'
 gem 'delayed_job_active_record'
 gem 'devise', '~> 4.9'
+gem 'letter_opener'
 gem 'rolify'
