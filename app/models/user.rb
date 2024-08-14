@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   rolify
-  after_create :assign_default_role
+  after_create :assign_default_role, :send_welcome_email
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -35,5 +35,11 @@ class User < ApplicationRecord
 
   def assign_default_role
     add_role(:student) if roles.blank?
+  end
+
+  def send_welcome_email
+    puts 'called'
+    SendUserWelcomeEmailJob.perform_later(self)
+    # UserMailer.welcome_email(self).deliver_later
   end
 end
