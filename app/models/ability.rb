@@ -8,10 +8,12 @@ class Ability
     #
     return unless user.present?
 
-    can :manage, User, id: user.id
-    return unless user.has_role? :admin
+    if user.has_role? :student
+      can :manage, :all, id: user.id
+    elsif user.has_role? :admin
+      can :manage, :all
+    end
 
-    can :manage, :all
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.
