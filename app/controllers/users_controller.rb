@@ -11,7 +11,6 @@ class UsersController < ApplicationController
   # GET /users/1 or /users/1.json
   def show
     @default_address = @user.addresses.default.first
-    # Rails.logger.debug "Current user ID: #{current_user.id}, Attempting to authorize user ID: #{@user.id}"
   end
 
   # GET /users/new
@@ -65,7 +64,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.find(params[:id]).decorate
+    @user = User.includes(addresses: %i[state city]).find(params[:id]).decorate
   end
 
   # Only allow a list of trusted parameters through.
