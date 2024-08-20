@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   resources :users
 
   namespace :api do
-    namespace :v1 do
-      resources :users, only: %i[index show update destroy]
+    namespace :v1, defaults: { format: :json } do
+      resources :users, only: %i[index create show update destroy]
       resources :states, only: [] do
         get 'cities', on: :member
       end

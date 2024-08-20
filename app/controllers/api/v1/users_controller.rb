@@ -7,6 +7,15 @@ module Api
         render 'api/v1/users/index', formats: [:json]
       end
 
+      def create
+        @user = User.new(user_params)
+        if @user.save
+          render 'api/v1/users/show', formats: [:json]
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
+
       def show
         render 'api/v1/users/show', formats: [:json]
       end
@@ -31,6 +40,11 @@ module Api
       end
 
       private
+
+      def user_params
+        params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, :password, :password_confirmation, hobbies: [],
+                                                                                                                           addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
+      end
 
       # Use callbacks to share common setup or constraints between actions.
       def set_user
