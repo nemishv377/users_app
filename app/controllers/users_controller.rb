@@ -7,7 +7,11 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @pagy, @users = pagy(User.includes(addresses: %i[state city]).all)
+    page = (params[:page].to_i > 0 ? params[:page].to_i : 1)
+    @pagy, @users = pagy(User.includes(addresses: %i[state city]).all, page:)
+    return unless @pagy.page > @pagy.pages || @pagy.page < 1
+
+    @pagy, @users = pagy(User.includes(addresses: %i[state city]), page: @pagy.pages)
   end
 
   # GET /users/1 or /users/1.json
