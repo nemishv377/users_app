@@ -3,7 +3,12 @@ module Api
     class UsersController < ApplicationController
       before_action :set_user, only: %i[show update destroy]
       def index
-        @pagy, @users = pagy(User.includes(addresses: %i[state city]).all)
+        page = (params[:page].to_i > 0 ? params[:page].to_i : 1)
+        @pagy, @users = pagy(User.includes(addresses: %i[state city]).all, page:)
+        return unless @pagy.page > @pagy.pages || @pagy.page < 1
+
+        @pagy, @users = pagy(User.includes(addresses: %i[state city]),
+                             page: @pagy.pages)
         render 'api/v1/users/index', formats: [:json]
       end
 
@@ -21,22 +26,17 @@ module Api
       end
 
       def update
-        respond_to do |format|
-          if @user.update(user_params)
-            format.json do
-              render :show, status: :ok,
-                            location: api_v1_user_url(@user, include: { addresses: { include: %i[state city] } })
-            end
-          else
-            format.json { render json: @user.errors, status: :unprocessable_entity }
-          end
+        if @user.update(user_params)
+          render 'api/v1/users/show', formats: [:json]
+        else
+          render json: @user.errors, status: :unprocessable_entity
         end
       end
 
       # DELETE /users/1 or /users/1.json
       def destroy
         @user.destroy!
-        head :no_content
+        render json: { notice: 'User was successfully destroyed.' }
       end
 
       private
