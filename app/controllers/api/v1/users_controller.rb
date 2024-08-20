@@ -4,11 +4,11 @@ module Api
       before_action :set_user, only: %i[show update destroy]
       def index
         @pagy, @users = pagy(User.includes(addresses: %i[state city]).all)
-        render json: @users, include: { addresses: { include: %i[state city] } }
+        render 'api/v1/users/index', formats: [:json]
       end
 
       def show
-        render json: @user, include: { addresses: { include: %i[state city] } }
+        render 'api/v1/users/show', formats: [:json]
       end
 
       def update
@@ -34,7 +34,10 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_user
-        @user = User.includes(addresses: %i[state city]).find(params[:id]).decorate
+        @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
+        return unless @user.nil?
+
+        render json: { error: 'User not found with this id.' }, status: :not_found
       end
     end
   end
