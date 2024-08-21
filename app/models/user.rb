@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   rolify
-  has_secure_password
+  # has_secure_password
   after_create :assign_default_role, :send_welcome_email
 
   # Include default devise modules. Others available are:
