@@ -1,6 +1,6 @@
-json.Pagination do
+json.pagination do
   json.extract! @pagy, :count, :limit, :page, :prev, :next, :pages
 end
-json.Users do
-  json.array! @users, partial: 'api/v1/users/user', as: :user
+json.users do
+  json.array! @users, partial: 'user', as: :user
 end
