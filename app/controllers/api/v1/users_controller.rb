@@ -2,6 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       skip_before_action :authenticate_user, only: [:create]
+      skip_before_action :authenticate_user_from_token!, only: [:create]
       before_action :set_user, only: %i[show update destroy]
       def index
         page = (params[:page].to_i.positive? ? params[:page].to_i : 1)
@@ -23,7 +24,15 @@ module Api
       end
 
       def show
-        render 'api/v1/users/show', formats: [:json]
+        if current_user.has_role? :admin
+          render 'api/v1/users/show', formats: [:json]
+        elsif !@user == current_user
+          render json: { error: 'User not found with this id.' }, status: :not_found
+        elsif @user == current_user
+          render 'api/v1/users/show', formats: [:json]
+        else
+          render json: { error: 'You are not authorized.' }, status: :not_found
+        end
       end
 
       def update
@@ -50,9 +59,13 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_user
         @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
-        return unless @user.nil?
-
-        render json: { error: 'User not found with this id.' }, status: :not_found
+        if @user.nil? && (current_user.has_role? :admin)
+          render json: { error: 'User not found with this id.' }, status: :not_found
+        elsif !(current_user.has_role? :admin) && !(@user == current_user)
+          render json: { error: 'You are not authorized.' }, status: :not_found
+        else
+          @user
+        end
       end
     end
   end
