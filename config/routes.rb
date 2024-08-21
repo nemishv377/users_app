@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :states, only: [] do
         get 'cities', on: :member
       end
+      post '/auth/login', to: 'authentication#login'
     end
   end
 
