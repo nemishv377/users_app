@@ -1,9 +1,10 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      skip_before_action :authenticate_user, only: [:create]
       before_action :set_user, only: %i[show update destroy]
       def index
-        page = (params[:page].to_i > 0 ? params[:page].to_i : 1)
+        page = (params[:page].to_i.positive? ? params[:page].to_i : 1)
         @pagy, @users = pagy(User.includes(addresses: %i[state city]).all, page:)
         return unless @pagy.page > @pagy.pages || @pagy.page < 1
 

@@ -141,6 +141,8 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.7.2)
+    jwt (2.8.2)
+      base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
       addressable (~> 2.8)
@@ -328,6 +330,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   bootsnap
   bullet
   cancancan
@@ -339,6 +342,7 @@ DEPENDENCIES
   draper
   importmap-rails
   jbuilder
+  jwt
   letter_opener
   pagy
   pg (~> 1.1)

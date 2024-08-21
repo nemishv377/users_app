@@ -79,3 +79,8 @@ gem 'delayed_job_active_record'
 gem 'devise', '~> 4.9'
 gem 'letter_opener'
 gem 'rolify'
+
+# Use JWT gem for token-based authentication
+gem 'jwt'
+# Use ActiveModel has_secure_password
+gem 'bcrypt', '~> 3.1.7'
