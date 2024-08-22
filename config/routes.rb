@@ -10,6 +10,9 @@ Rails.application.routes.draw do
         get 'cities', on: :member
       end
       post '/auth/login', to: 'authentication#login'
+      post '/auth/signup', to: 'authentication#signup'
+      post 'auth/password/new', to: 'authentication#reset_password_token'
+      post 'auth/password/edit', to: 'authentication#edit_password'
     end
   end
 
