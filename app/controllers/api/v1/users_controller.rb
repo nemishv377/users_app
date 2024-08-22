@@ -1,7 +1,6 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      skip_before_action :authenticate_user, only: [:create]
       skip_before_action :authenticate_user_from_token!, only: [:create]
       before_action :set_user, only: %i[show update destroy]
       def index
@@ -26,8 +25,6 @@ module Api
       def show
         if current_user.has_role? :admin
           render 'api/v1/users/show', formats: [:json]
-        elsif !@user == current_user
-          render json: { error: 'User not found with this id.' }, status: :not_found
         elsif @user == current_user
           render 'api/v1/users/show', formats: [:json]
         else
