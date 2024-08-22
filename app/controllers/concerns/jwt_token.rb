@@ -4,7 +4,7 @@ module JwtToken
   extend ActiveSupport::Concern
   SECRET_KEY = Rails.application.credentials.secret_key_base.to_s
   def self.encode(payload)
-    payload[:exp] = 7.days.from_now.to_i
+    payload[:exp] = 24.hours.from_now.to_i
     JWT.encode(payload, SECRET_KEY)
   end
 
