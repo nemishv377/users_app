@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   VALID_GENDERS = %w[Male Female Other]
   VALID_HOBBIES = %w[Reading Travelling Photography]
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/
 
   validates :first_name, presence: true,
                          length: { minimum: 2, maximum: 50, message: 'must be between 2 and 50 characters' }
@@ -25,6 +25,7 @@ class User < ApplicationRecord
   validates :gender, presence: true
   validates :hobbies, presence: true
   validate :profile_avatar_content_type
+  validate :must_have_at_least_one_address
 
   def profile_avatar_content_type
     return unless avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
@@ -39,8 +40,13 @@ class User < ApplicationRecord
   end
 
   def send_welcome_email
-    puts 'called'
     SendUserWelcomeEmailJob.perform_later(self)
     # UserMailer.welcome_email(self).deliver_later
+  end
+
+  def must_have_at_least_one_address
+    return unless addresses.empty?
+
+    errors.add(:addresses, 'must have at least one valid address')
   end
 end
