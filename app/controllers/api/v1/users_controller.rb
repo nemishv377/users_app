@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      skip_before_action :authenticate_user_from_token!, only: [:create]
+      before_action :authorize_admin!, only: [:create]
       before_action :set_user, only: %i[show update destroy]
       def index
         page = (params[:page].to_i.positive? ? params[:page].to_i : 1)
@@ -15,6 +15,7 @@ module Api
 
       def create
         @user = User.new(user_params)
+        @user.password = SecureRandom.hex(5)
         if @user.save
           render 'api/v1/users/show', formats: [:json]
         else
@@ -63,6 +64,10 @@ module Api
         else
           @user
         end
+      end
+
+      def authorize_admin!
+        render json: { error: 'Not Authorized' }, status: :unauthorized unless @current_user.has_role? :admin
       end
     end
   end
