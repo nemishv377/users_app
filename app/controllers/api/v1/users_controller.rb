@@ -3,6 +3,7 @@ module Api
     class UsersController < ApplicationController
       before_action :authorize_admin!, only: [:create]
       before_action :set_user, only: %i[show update destroy]
+      before_action :check_user_params, only: %i[create update]
       def index
         page = (params[:page].to_i.positive? ? params[:page].to_i : 1)
         @pagy, @users = pagy(User.includes(addresses: %i[state city]).all, page:)
@@ -68,6 +69,12 @@ module Api
 
       def authorize_admin!
         render json: { error: 'Not Authorized' }, status: :unauthorized unless @current_user.has_role? :admin
+      end
+
+      def check_user_params
+        return if params[:user].present?
+
+        render json: { error: 'User data is missing' }, status: :unprocessable_entity
       end
     end
   end
