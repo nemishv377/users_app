@@ -69,7 +69,7 @@ module Api
       def check_user_params
         return if params[:user].present?
 
-        render json: { error: 'User data is missing' }, status: :unprocessable_entity
+        render json: { message: 'User data is required.' }, status: :unprocessable_entity
       end
     end
   end
