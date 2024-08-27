@@ -9,30 +9,27 @@ module Api
         if !params[:user].present?
           render json: { message: 'User data is required.' }, status: :unprocessable_entity
         else
-          service = Api::V1::SignupService.new(user_params)
-          result = service.call
-          if result[:error]
-            render json: result[:error], status: :unprocessable_entity
+          signup_result = Api::V1::SignupService.new(user_params).call
+          if signup_result[:error]
+            render json: signup_result[:error], status: :unprocessable_entity
           else
-            render result[:user], formats: [:json]
+            render signup_result[:user], formats: [:json]
           end
         end
       end
 
       def login
         @email = params[:email].to_s.strip
-        service = Api::V1::LoginService.new(@email, @password)
-        result = service.call
-        if result[:error]
-          render json: result[:error], status: :unauthorized
+        login_result = Api::V1::LoginService.new(email: @email, password: @password).call
+        if login_result[:error]
+          render json: login_result[:error], status: :unauthorized
         else
-          render json: result, status: :ok
+          render json: login_result, status: :ok
         end
       end
 
       def reset_password_token
-        service = Api::V1::ResetPasswordService.new(@email)
-        result = service.call
+        result = Api::V1::ResetPasswordService.new(@email).call
         if result[:error]
           render json: result[:error], status: :not_found
         else
@@ -41,8 +38,8 @@ module Api
       end
 
       def edit_password
-        service = Api::V1::EditPasswordService.new(params[:reset_password_token], @password)
-        result = service.call
+        result = Api::V1::EditPasswordService.new(reset_password_token: params[:reset_password_token],
+                                                  password: @password).call
         if result[:error]
           render json: result[:error], status: :unprocessable_entity
         else
@@ -51,8 +48,7 @@ module Api
       end
 
       def forgot_password
-        service = Api::V1::ForgotPasswordService.new(@email)
-        result = service.call
+        result = Api::V1::ForgotPasswordService.new(@email).call
         if result[:error]
           render json: result[:error], status: :unprocessable_entity
         else

@@ -15,8 +15,6 @@ module Api
       end
 
       def create
-        # @user = User.new(user_params)
-        # @user.password = SecureRandom.hex(5)
         @user = ::CreateUser.new(user_params).call
         if @user.save
           render 'api/v1/users/show', formats: [:json]
