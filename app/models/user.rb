@@ -6,7 +6,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: [:google_oauth2]
 
   has_one_attached :avatar
   has_many :addresses, dependent: :destroy
@@ -31,6 +31,29 @@ class User < ApplicationRecord
     return unless avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
 
     errors.add(:avatar, 'must be a JPEG or PNG')
+  end
+
+  def self.from_google(auth)
+    email = auth.info.email
+    first_name = auth.info.first_name
+    last_name = auth.info.last_name
+    gender = auth.info.gender
+
+    user = User.find_or_initialize_by(email:) do |u|
+      u.first_name = first_name
+      u.last_name = last_name
+      u.gender = gender
+      u.hobbies = ['Reading']
+      u.password = 12_345_678
+      # u.addresses[0].plot_no = 123
+      # u.addresses[0].society_name = 'Your society name'
+      # u.addresses[0].pincode = 'pincode'
+      # u.addresses[0].state_id = 1
+      # u.addresses[0].city_id = 1
+    end
+
+    user.save!(validate: false)
+    user
   end
 
   private
