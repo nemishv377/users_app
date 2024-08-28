@@ -22,10 +22,10 @@ class User < ApplicationRecord
   validates :last_name, presence: true,
                         length: { minimum: 2, maximum: 50, message: 'must be between 2 and 50 characters' }
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :gender, presence: true
-  validates :hobbies, presence: true
-  validate :profile_avatar_content_type
-  validate :must_have_at_least_one_address
+  # validates :gender, presence: true
+  # validates :hobbies, presence: true
+  # validate :profile_avatar_content_type
+  # validate :must_have_at_least_one_address
 
   def profile_avatar_content_type
     return unless avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
@@ -35,21 +35,14 @@ class User < ApplicationRecord
 
   def self.from_google(auth)
     email = auth.info.email
-    first_name = auth.info.first_name
-    last_name = auth.info.last_name
-    gender = auth.info.gender
-
+    puts auth.info
     user = User.find_or_initialize_by(email:) do |u|
-      u.first_name = first_name
-      u.last_name = last_name
-      u.gender = gender
+      u.first_name = auth.info.first_name
+      u.last_name = auth.info.last_name
       u.hobbies = ['Reading']
       u.password = 12_345_678
-      # u.addresses[0].plot_no = 123
-      # u.addresses[0].society_name = 'Your society name'
-      # u.addresses[0].pincode = 'pincode'
-      # u.addresses[0].state_id = 1
-      # u.addresses[0].city_id = 1
+      u.provider = 'google' if auth.provider == 'google_oauth2'
+      u.uid = auth.uid
     end
 
     user.save!(validate: false)

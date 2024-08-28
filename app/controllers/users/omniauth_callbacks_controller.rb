@@ -15,15 +15,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
-  def from_google_params
-    @from_google_params ||= {
-      email: auth.info.email,
-      first_name: auth.info.first_name,
-      last_name: auth.info.last_name,
-      gender: auth.info.gender
-    }
-  end
-
   def auth
     @auth ||= request.env['omniauth.auth']
   end
