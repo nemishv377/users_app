@@ -6,7 +6,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: [:google_oauth2]
+         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2 github]
 
   has_one_attached :avatar
   has_many :addresses, dependent: :destroy
@@ -22,10 +22,10 @@ class User < ApplicationRecord
   validates :last_name, presence: true,
                         length: { minimum: 2, maximum: 50, message: 'must be between 2 and 50 characters' }
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  # validates :gender, presence: true
-  # validates :hobbies, presence: true
-  # validate :profile_avatar_content_type
-  # validate :must_have_at_least_one_address
+  validates :gender, presence: true
+  validates :hobbies, presence: true
+  validate :profile_avatar_content_type
+  validate :must_have_at_least_one_address
 
   def profile_avatar_content_type
     return unless avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
@@ -42,6 +42,22 @@ class User < ApplicationRecord
       u.hobbies = ['Reading']
       u.password = 12_345_678
       u.provider = 'google' if auth.provider == 'google_oauth2'
+      u.uid = auth.uid
+    end
+
+    user.save!(validate: false)
+    user
+  end
+
+  def self.from_github(auth)
+    email = auth.info.email
+    puts auth.info
+    user = User.find_or_initialize_by(email:) do |u|
+      u.first_name = auth.info.name
+      u.last_name = auth.info.last_name
+      u.hobbies = ['Reading']
+      u.password = 12_345_678
+      u.provider = auth.provider
       u.uid = auth.uid
     end
 

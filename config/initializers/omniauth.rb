@@ -10,3 +10,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              image_size: 50 #-- This will make sure that the profile picture is 50x50 pixels.
            }
 end
+
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET'], scope: 'user,repo,gist'
+end
