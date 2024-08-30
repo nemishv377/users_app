@@ -6,8 +6,9 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2 github]
+         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2 github linkedin]
 
+  # attr_encrypted_encrypted_attributes :linkedin_oauth_token, key: Rails.application.credentials[:encryption_key]
   has_one_attached :avatar
   has_many :addresses, dependent: :destroy
   serialize :hobbies, Array, coder: YAML
@@ -59,6 +60,24 @@ class User < ApplicationRecord
       u.password = 12_345_678
       u.provider = auth.provider
       u.uid = auth.uid
+    end
+
+    user.save!(validate: false)
+    user
+  end
+
+  def self.from_linkedin(auth)
+    email = auth.info.email
+    puts auth.info
+    user = User.find_or_initialize_by(email:) do |u|
+      u.first_name = auth.info.first_name
+      u.last_name = auth.info.last_name
+      u.hobbies = ['Reading']
+      u.password = 12_345_678
+      u.provider = auth.provider
+      u.uid = auth.uid
+      u.linkedin_oauth_token = auth.credentials.token
+      u.linkedin_oauth_token_expires_at = Time.at(auth.credentials.expires_at)
     end
 
     user.save!(validate: false)

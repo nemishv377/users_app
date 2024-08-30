@@ -14,3 +14,15 @@ end
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET'], scope: 'user,repo,gist'
 end
+
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :linkedin, ENV['LINKEDIN_CLIENT_ID'], ENV['LINKEDIN_CLIENT_SECRET'],
+           scope: 'openid profile email',
+           response_type: :code,
+           client_options: {
+             scheme: 'https',
+             authorization_endpoint: '/oauth2/auth',
+             token_endpoint: '/oauth2/token',
+             userinfo_endpoint: '/userinfo'
+           }
+end

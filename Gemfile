@@ -93,3 +93,6 @@ gem 'omniauth-rails_csrf_protection'
 
 # Github Authentication
 gem 'omniauth-github', '~> 2.0.0'
+
+# LinkedIn Authentication
+gem 'omniauth-linkedin-openid'
