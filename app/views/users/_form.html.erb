@@ -1,3 +1,4 @@
+<%= form_with(model: user, class: "contents", name: "login-form") do |form| %>
   <div id="fullname">
     <div class="my-5 name">
       <div class="field_label">
@@ -82,17 +83,25 @@
     </div>
   <% end %>
   
-  <div class="my-5">
-    <%= form.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= form.password_field :password, autocomplete: "new-password", class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  <%# ============================ Nested address form ==================================== %>
+  
+  <%= form.fields_for :addresses do |address_form| %>
+    <%= render 'address_fields', f: address_form, user: user %>
+  <% end %>
+  <div class="rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium cursor-pointer" >
+    <%= link_to_add_association "+Add address", form, :addresses, render_options: {locals: { user: user }}  %>
   </div>
+   
+  <%# ============================ Nested address form ==================================== %>
 
   <div class="my-5">
-    <%= form.label :password_confirmation %><br />
-    <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <strong><%= form.label :avatar, "Profile Avatar" %></strong>
+    <%= form.file_field :avatar , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %> 
+    <% if user.errors[:avatar].any? %>
+      <div class="text-red-500 font-medium rounded">
+        <%= user.errors[:avatar][0] %>
+      </div>
+    <% end %>
   </div>
   
   <%# ============================ Nested address form ==================================== %>
@@ -106,15 +115,8 @@
    
   <%# ============================ Nested address form ==================================== %>
 
-
-  <div class="my-5">
-    <strong><%= form.label :avatar, "Profile Avatar" %></strong>
-    <%= form.file_field :avatar , class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %> 
-    <% if user.errors[:avatar].any? %>
-      <div class="text-red-500 font-medium rounded">
-        <%= user.errors[:avatar][0] %>
-      </div>
-    <% end %>
+  <div class="inline">
+    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
   </div>
 
 

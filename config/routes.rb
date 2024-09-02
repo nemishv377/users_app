@@ -1,21 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions' }
-
   resources :users
-
-  namespace :api do
-    namespace :v1, defaults: { format: :json } do
-      resources :users, only: %i[index create show update destroy]
-      resources :states, only: [] do
-        get 'cities', on: :member
-      end
-      post '/auth/login', to: 'authentication#login'
-      post '/auth/signup', to: 'authentication#signup'
-      post 'auth/password/reset_token', to: 'authentication#reset_password_token'
-      post 'auth/password/edit', to: 'authentication#edit_password'
-      post 'auth/forgot_password', to: 'authentication#forgot_password'
-    end
-  end
 
   resources :states, only: [] do
     get 'cities', on: :member
@@ -29,5 +13,4 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root 'users#index'
-  match '*path', to: 'application#render_404', via: :all
 end

@@ -7,7 +7,6 @@ gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'cocoon'
-gem 'draper'
 gem 'pagy'
 gem 'rubocop', '~> 1.65', require: false
 gem 'sprockets-rails'
@@ -49,7 +48,6 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
-gem 'bullet', group: 'development'
 gem 'pry-rails'
 # gem "jquery-rails"
 # gem "sassc-rails"
@@ -72,15 +70,3 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
-
-gem 'cancancan'
-gem 'daemons'
-gem 'delayed_job_active_record'
-gem 'devise', '~> 4.9'
-gem 'letter_opener'
-gem 'rolify'
-
-# Use JWT gem for token-based authentication
-gem 'jwt'
-# Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'

@@ -124,18 +124,3 @@ small{
 .active {
    background-color: burlywood;
 }
-
-#show_addresses{
-   background-color: #0f2e0c;
-   max-width: 150px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   color: white;
-   padding: 5px 1px 5px 1px;
-   border: 1px solid;
-   border-radius: 5px;
-   margin-bottom: 15px;
-   font-size: 12px;
-   font-weight: 400;
-}

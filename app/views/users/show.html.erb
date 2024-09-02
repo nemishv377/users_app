@@ -1,1 +1,105 @@
-<%= render "show", user: @user %>
+<div class="mx-auto md:w-2/3 w-full flex">
+  
+  <div class="mx-auto">
+    <% if notice.present? %>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+  
+    <table id="show_table">
+      <tr>
+        <th><strong>First name </strong></th>
+        <td>: <%= @user.first_name %></td>
+      </tr>
+      <tr>
+        <th><strong>Last name  </strong></th>
+        <td>: <%= @user.last_name %></td>
+      </tr>
+      <tr>
+        <th><strong>Email </strong></th>
+        <td>: <%= @user.email %></td>
+      </tr>
+      <tr>
+        <th><strong>Gender  </strong></th>
+        <td>: <%= @user.gender %></td>
+      </tr>
+      <tr>
+        <th><strong>Hobby  </strong></th>
+        <td>:  <%= @user.hobbies.join(", ") %></td>
+      </tr>
+
+      
+      
+      <% if @default_address %>
+        <tr>
+          <th><strong>Permanent Address  </strong></th>
+          <td>: <%= @default_address.plot_no + ", " + @default_address.society_name + ", " + @default_address.city.name  + "-" + @default_address.pincode  %></td>
+        </tr>
+        <tr>
+          <th>State</th>
+          <td>: <%= @default_address.state.name %></td>
+        </tr>
+        <tr>
+          <th>City  </th>
+          <td>: <%= @default_address.city.name %></td>
+        </tr>
+      <% end %>
+
+      <tfoot id="more_addresses" style="display:none;">
+        <% user_addresses = @user.addresses.includes(:state, :city).except_default %>
+        <% user_addresses.each do |address| %>
+          <%= render address %>
+        <% end %>
+      <tfoot>
+
+    </table>
+    <% if user_addresses.length>0 %>
+      <div id="show_addresses" style="background-color:#0f2e0c; 
+                                      max-width:150px; 
+                                      display:flex; 
+                                      justify-content:center; 
+                                      align-items:center; 
+                                      color:white; 
+                                      padding:5px 1px 5px 1px; 
+                                      border:1px solid; 
+                                      border-radius:5px; 
+                                      margin-bottom:15px; 
+                                      font-size:12px;
+                                      font-weight:400;">
+        Show & Hide addresses
+      </div>
+    <% end %>
+
+    <%= link_to "Edit", edit_user_path(@user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
+    <%= link_to "Delete", user_path(@user), data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              }, class: "ml-2 rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
+    <%= link_to "Back", users_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
+  </div>
+
+  <% if notice.present? %>
+    <div style="display: flex;  flex-direction: column;  align-items: center;  position:relative;  top:80px">
+  <% else %>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+  <% end %>
+            
+      <% if @user.avatar.attached? %>
+        <img src="<%= (url_for(@user.avatar)) %>" alt="" width="200" height="180">
+      <% else %>
+        <img src="" alt="Please upload your Profile Avatar" width="200" height="180">
+      <% end %>
+      <strong>Profile Avatar</strong>
+    </div>
+
+</div>
+
+<script>
+
+  $(document).ready(function() {
+    $('#show_addresses').click(function() {
+      let user_addresses = <%= raw @user.addresses.to_json %>
+      $("#more_addresses").toggle();
+    });
+  });
+  
+</script>

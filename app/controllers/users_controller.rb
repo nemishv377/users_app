@@ -1,17 +1,9 @@
 class UsersController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
-
-  before_action :authenticate_user!
   before_action :set_user, only: %i[show edit update destroy]
-  load_and_authorize_resource
 
   # GET /users or /users.json
   def index
-    page = (params[:page].to_i > 0 ? params[:page].to_i : 1)
-    @pagy, @users = pagy(User.includes(addresses: %i[state city]).all, page:)
-    return unless @pagy.page > @pagy.pages || @pagy.page < 1
-
-    @pagy, @users = pagy(User.includes(addresses: %i[state city]), page: @pagy.pages)
+    @pagy, @users = pagy(User.includes(addresses: %i[state city]).all)
   end
 
   # GET /users/1 or /users/1.json
@@ -70,24 +62,12 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id]) if current_user.has_role? :student
-    @user = User.find_by(id: params[:id])
-    return if @user.nil?
-
-    @user = @user.decorate
+    @user = User.includes(addresses: %i[state city]).find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, hobbies: [],
                                                                                     addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
-  end
-
-  def user_not_found
-    if !current_user.has_role? :student
-      render file: Rails.root.join('public', '404.html'), status: :not_found, layout: false if @user.nil?
-    else
-      redirect_to users_path, alert: 'You are not authorized to access that page.'
-    end
   end
 end
