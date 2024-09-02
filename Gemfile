@@ -96,3 +96,5 @@ gem 'omniauth-github', '~> 2.0.0'
 
 # Facebook Authentication
 gem 'omniauth-facebook'
+# LinkedIn Authentication
+gem 'omniauth-linkedin-openid'

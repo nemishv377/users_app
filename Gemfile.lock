@@ -222,6 +222,10 @@ GEM
       oauth2 (~> 2.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
+    omniauth-linkedin-openid (1.0.1)
+      oauth2 (~> 2.0)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.8)
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
@@ -399,6 +403,7 @@ DEPENDENCIES
   omniauth-facebook
   omniauth-github (~> 2.0.0)
   omniauth-google-oauth2
+  omniauth-linkedin-openid
   omniauth-rails_csrf_protection
   pagy
   pg (~> 1.1)

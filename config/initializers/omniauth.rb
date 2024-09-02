@@ -16,6 +16,16 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :linkedin, ENV['LINKEDIN_CLIENT_ID'], ENV['LINKEDIN_CLIENT_SECRET'],
+           scope: 'openid profile email',
+           client_options: {
+             authorize_url: 'https://www.linkedin.com/oauth/v2/authorization',
+             token_url: 'https://www.linkedin.com/oauth/v2/accessToken',
+             auth_scheme: :request_body
+           }
+end
+
+Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'],
            scope: 'email public_profile user_gender'
 end
