@@ -7,86 +7,52 @@ module Api
 
       def signup
         if !params[:user].present?
-          render json: { error: 'User data is required.' }, status: :unprocessable_entity
+          render json: { message: 'User data is required.' }, status: :unprocessable_entity
         else
-          @user = User.new(user_params)
-          if @user.save
-            render @user, formats: [:json]
+          signup_result = Api::V1::SignupService.new(user_params).call
+          if signup_result[:error]
+            render json: signup_result[:error], status: :unprocessable_entity
           else
-            render json: @user.errors, status: :unprocessable_entity
+            render signup_result[:user], formats: [:json]
           end
         end
       end
 
       def login
         @email = params[:email].to_s.strip
-
-        if @email.blank? && @password.blank?
-          render json: { message: 'Credential are required' }
-        elsif @email.blank?
-          render json: { message: 'Email is required' }
-        elsif @password.blank?
-          render json: { message: 'Password is required' }
+        login_result = Api::V1::LoginService.new(email: @email, password: @password).call
+        if login_result[:error]
+          render json: login_result[:error], status: :unauthorized
         else
-          @user = User.find_by(email: @email)
-
-          if @user&.valid_password?(@password)
-            token = JwtToken.encode(user_id: @user.id)
-            exp_time = 24.hours.from_now
-            render json: {
-              token:,
-              exp: exp_time.strftime('%m-%d-%Y %H:%M'),
-              user: @user
-            }, status: :ok
-          else
-            render json: { error: 'Invalid email or password.' }, status: :unauthorized
-          end
+          render json: login_result, status: :ok
         end
       end
 
       def reset_password_token
-        @user = User.find_by(email: @email)
-
-        if !@user.nil?
-          @user.send(:set_reset_password_token)
-          @user.save(validate: false)
-          UserMailer.reset_password_token(@user).deliver_later
-          render json: { message: "Token is sended succesfully to #{@email}" },
-                 status: :ok
+        result = Api::V1::ResetPasswordService.new(@email).call
+        if result[:error]
+          render json: result[:error], status: :not_found
         else
-          render json: { error: 'Email not found' }, status: :not_found
+          render json: result, status: :ok
         end
       end
 
       def edit_password
-        reset_password_token = params[:reset_password_token]
-
-        if @password.blank? && reset_password_token.blank?
-          render json: { message: 'Token and password both are missing.' }
-        elsif @password.blank?
-          render json: { message: 'Password is required.' }
-        elsif reset_password_token.blank?
-          render json: { message: 'Token is required.' }
+        result = Api::V1::EditPasswordService.new(reset_password_token: params[:reset_password_token],
+                                                  password: @password).call
+        if result[:error]
+          render json: result[:error], status: :unprocessable_entity
         else
-          @user = User.find_by(reset_password_token:)
-
-          if @user.nil?
-            render json: { error: 'Invalid or expired token' }, status: :unprocessable_entity
-          elsif @user&.update(password: @password, reset_password_token: nil)
-            render json: { user: @user, message: 'Password successfully updated' }, status: :ok
-          else
-            render json: { error: 'Unable to update password' }, status: :unprocessable_entity
-          end
+          render json: result, status: :ok
         end
       end
 
       def forgot_password
-        if invalid_email_format?
-          render json: { message: 'Invalid email format.' }, status: :unprocessable_entity
+        result = Api::V1::ForgotPasswordService.new(@email).call
+        if result[:error]
+          render json: result[:error], status: :unprocessable_entity
         else
-          @user = User.find_by(email: @email)
-          @user&.send_reset_password_instructions
-          render json: { message: 'Mail has been sent to your email account.' }
+          render json: result
         end
       end
 
@@ -95,10 +61,6 @@ module Api
       def user_params
         params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, :password, hobbies: [],
                                                                                                    addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
-      end
-
-      def invalid_email_format?
-        !/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i.match?(@email)
       end
 
       def set_email

@@ -15,8 +15,7 @@ module Api
       end
 
       def create
-        @user = User.new(user_params)
-        @user.password = SecureRandom.hex(5)
+        @user = ::CreateUser.new(user_params).call
         if @user.save
           render 'api/v1/users/show', formats: [:json]
         else
@@ -25,11 +24,12 @@ module Api
       end
 
       def show
-        if current_user.has_role? :admin
+        if @user.nil? && (current_user.has_role? :admin)
+          render json: { error: 'User not found with this id.' }, status: :not_found
+        # elsif (current_user.has_role? :admin) || (@user == current_user)
+        elsif AuthorizeUser.new(current_user, @user, :admin).call
           render 'api/v1/users/show', formats: [:json]
-        elsif @user == current_user
-          render 'api/v1/users/show', formats: [:json]
-        else
+        elsif !(current_user.has_role? :admin) && !(@user == current_user)
           render json: { error: 'You are not authorized.' }, status: :not_found
         end
       end
@@ -58,13 +58,6 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_user
         @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
-        if @user.nil? && (current_user.has_role? :admin)
-          render json: { error: 'User not found with this id.' }, status: :not_found
-        elsif !(current_user.has_role? :admin) && !(@user == current_user)
-          render json: { error: 'You are not authorized.' }, status: :not_found
-        else
-          @user
-        end
       end
 
       def authorize_admin!
@@ -74,7 +67,7 @@ module Api
       def check_user_params
         return if params[:user].present?
 
-        render json: { error: 'User data is missing' }, status: :unprocessable_entity
+        render json: { message: 'User data is required.' }, status: :unprocessable_entity
       end
     end
   end
