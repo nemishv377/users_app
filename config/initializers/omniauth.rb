@@ -9,24 +9,20 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              image_aspect_ratio: 'square', #-- This will make sure that the profile picture is a square.
              image_size: 50 #-- This will make sure that the profile picture is 50x50 pixels.
            }
-end
 
-Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET'], scope: 'user,repo,gist'
-end
+  provider :github,
+           ENV['GITHUB_KEY'],
+           ENV['GITHUB_SECRET'],
+           scope: 'user,repo,gist'
 
-Rails.application.config.middleware.use OmniAuth::Builder do
   provider :linkedin, ENV['LINKEDIN_CLIENT_ID'], ENV['LINKEDIN_CLIENT_SECRET'],
            scope: 'openid profile email',
            client_options: {
-             authorize_url: 'https://www.linkedin.com/oauth/v2/authorization',
              token_url: 'https://www.linkedin.com/oauth/v2/accessToken',
              auth_scheme: :request_body
            }
-end
 
-Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'],
-           scope: 'email,public_profile,user_gender',
-           info_fields: 'email,name,gender'
+           scope: 'email, public_profile',
+           info_fields: 'email, first_name, last_name, name, gender'
 end

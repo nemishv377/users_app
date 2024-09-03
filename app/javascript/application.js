@@ -3,7 +3,3 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "./cocoon"
 
-if (window.location.hash === '#_=_') {
-    window.location.hash = '';  // Remove the hash
-    history.pushState('', document.title, window.location.pathname);  // Remove the trailing #
-}

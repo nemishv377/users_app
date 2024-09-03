@@ -19,8 +19,13 @@
 <% end %>
 
 <%- if devise_mapping.omniauthable? %>
-  <%= button_to  'Log in with Google', user_google_oauth2_omniauth_authorize_path, method: :post, :data => {turbo: "false"} %>
-  <%= button_to  'Log in with Github', user_github_omniauth_authorize_path, method: :post, :data => {turbo: "false"} %> 
-  <%= button_to  'Log in with LinkdIn', user_linkedin_omniauth_authorize_path, method: :post, :data => {turbo: "false"} %> 
-  <%= button_to  'Log in with Facebook', user_facebook_omniauth_authorize_path, method: :post, :data => {turbo: "false"} %> 
+  <% providers = {
+      'Google' => user_google_oauth2_omniauth_authorize_path,
+      'Github' => user_github_omniauth_authorize_path,
+      'LinkedIn' => user_linkedin_omniauth_authorize_path,
+      'Facebook' => user_facebook_omniauth_authorize_path
+    } %>
+  <% providers.each do |provider_name, provider_path| %>
+    <%= button_to "Log in with #{provider_name}", provider_path, method: :post, data: { turbo: "false" } %>
+  <% end %>
 <% end %>

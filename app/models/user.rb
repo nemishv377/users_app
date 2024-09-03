@@ -34,65 +34,33 @@ class User < ApplicationRecord
   end
 
   def self.from_google(auth)
-    email = auth.info.email
-    puts auth.info
-    user = User.find_or_initialize_by(email:) do |u|
-      u.first_name = auth.info.first_name
-      u.last_name = auth.info.last_name
-      u.hobbies = ['Reading']
-      u.password = 12_345_678
-      u.provider = 'google' if auth.provider == 'google_oauth2'
-      u.uid = auth.uid
-    end
-
-    user.save!(validate: false)
-    user
+    find_or_initialize_user(auth, 'google', nil)
   end
 
   def self.from_github(auth)
-    email = auth.info.email
-    puts auth.info
-    user = User.find_or_initialize_by(email:) do |u|
-      u.first_name = auth.info.name
-      u.last_name = auth.info.last_name
-      u.hobbies = ['Reading']
-      u.password = 12_345_678
-      u.provider = auth.provider
-      u.uid = auth.uid
-    end
-
-    user.save!(validate: false)
-    user
+    find_or_initialize_user(auth, auth.provider, nil)
   end
 
   def self.from_linkedin(auth)
-    email = auth.info.email
-    user = User.find_or_initialize_by(email:) do |u|
-      u.first_name = auth.info.first_name
-      u.last_name = auth.info.last_name
-      u.hobbies = ['Reading']
-      u.password = 12_345_678
-      u.provider = auth.provider
-      u.uid = auth.uid
-      u.linkedin_oauth_token = auth.credentials.token
-      u.linkedin_oauth_token_expires_at = Time.at(auth.credentials.expires_at)
-    end
-
-    user.save!(validate: false)
-    user
+    find_or_initialize_user(auth, auth.provider, auth.credentials.token)
   end
 
   def self.from_facebook(auth)
-    email = auth.info.email
-    puts auth.info
-    user = User.find_or_initialize_by(email:) do |u|
-      u.first_name = auth.info.name
+    find_or_initialize_user(auth, auth.provider, nil)
+  end
+
+  def self.find_or_initialize_user(auth, provider, linkedin_token)
+    user = User.find_or_initialize_by(uid: auth.uid) do |u|
+      u.first_name = auth.info.first_name || auth.info.name
       u.last_name = auth.info.last_name
-      u.gender = auth.extra.raw_info.gender
+      u.email = auth.info.email if auth.info.email
       u.hobbies = ['Reading']
       u.password = 12_345_678
-      u.provider = auth.provider
+      u.provider = provider
       u.uid = auth.uid
+      u.gender = auth.extra.raw_info.gender.capitalize if provider == 'facebook'
+      u.linkedin_oauth_token = linkedin_token if linkedin_token
+      u.linkedin_oauth_token_expires_at = Time.at(auth.credentials.expires_at) if linkedin_token
     end
 
     user.save!(validate: false)
