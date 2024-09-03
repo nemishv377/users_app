@@ -38,9 +38,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       redirect_to new_user_registration_url
     end
   end
-  
+
   def facebook
-    @user = User.from_omniauth(auth)
+    @user = User.from_facebook(auth)
 
     if @user.persisted?
       sign_in_and_redirect @user, event: :authentication

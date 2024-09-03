@@ -82,13 +82,13 @@ class User < ApplicationRecord
     user
   end
 
-  def self.from_omniauth(auth)
+  def self.from_facebook(auth)
     email = auth.info.email
     puts auth.info
     user = User.find_or_initialize_by(email:) do |u|
       u.first_name = auth.info.name
       u.last_name = auth.info.last_name
-      u.gender = auth.info.gender
+      u.gender = auth.extra.raw_info.gender
       u.hobbies = ['Reading']
       u.password = 12_345_678
       u.provider = auth.provider
