@@ -1,3 +1,4 @@
+require 'csv'
 class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
@@ -66,6 +67,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def export_csv
+    respond_to do |format|
+      format.csv { send_data generate_csv(User.all), filename: "users-#{Date.today}.csv" }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -88,6 +95,32 @@ class UsersController < ApplicationController
       render file: Rails.root.join('public', '404.html'), status: :not_found, layout: false if @user.nil?
     else
       redirect_to users_path, alert: 'You are not authorized to access that page.'
+    end
+  end
+
+  def generate_csv(users)
+    CSV.generate(headers: true) do |csv|
+      csv << ['ID', 'First Name', 'Last Name', 'Email', 'Gender', 'Avatar', 'Hobbies', 'Addresses']
+      users.find_each do |user|
+        addresses = user.addresses.map do |address|
+          [
+            address.plot_no,
+            address.society_name,
+            address.pincode,
+            address.state.name,
+            address.city.name
+          ].join(', ')
+        end.join(' || ')
+        csv << [
+          user.id,
+          user.first_name,
+          user.last_name,
+          user.email,
+          user.gender,
+          user.hobbies.join(', '),
+          addresses
+        ]
+      end
     end
   end
 end

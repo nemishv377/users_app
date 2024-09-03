@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions',
                                     omniauth_callbacks: 'users/omniauth_callbacks' }
 
-  resources :users
+  resources :users do
+    collection do
+      get :export_csv
+    end
+  end
 
   namespace :api do
     namespace :v1, defaults: { format: :json } do
