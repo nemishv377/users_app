@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show edit update destroy]
+  before_action :set_user, only: %i[show edit update destroy export_csv_for_user]
   load_and_authorize_resource
 
   # GET /users or /users.json
@@ -69,7 +69,31 @@ class UsersController < ApplicationController
 
   def export_csv
     respond_to do |format|
-      format.csv { send_data generate_csv(User.all), filename: "users-#{Date.today}.csv" }
+      format.csv do
+        send_data generate_csv(User.includes(addresses: %i[state city]).all), filename: "users-#{Date.today}.csv"
+      end
+    end
+  end
+
+  def export_csv_for_user
+    respond_to do |format|
+      format.csv { send_data generate_csv_for_user(@user), filename: "#{@user.first_name}-#{Date.today}.csv" }
+    end
+  end
+
+  def generate_csv(users)
+    CSV.generate(headers: true) do |csv|
+      add_csv_headers(csv)
+      users.find_each do |user|
+        csv << generate_user_row(user)
+      end
+    end
+  end
+
+  def generate_csv_for_user(user)
+    CSV.generate(headers: true) do |csv|
+      add_csv_headers(csv)
+      csv << generate_user_row(user)
     end
   end
 
@@ -77,8 +101,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id]) if current_user.has_role? :student
-    @user = User.find_by(id: params[:id])
+    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
     return if @user.nil?
 
     @user = @user.decorate
@@ -98,29 +121,28 @@ class UsersController < ApplicationController
     end
   end
 
-  def generate_csv(users)
-    CSV.generate(headers: true) do |csv|
-      csv << ['ID', 'First Name', 'Last Name', 'Email', 'Gender', 'Avatar', 'Hobbies', 'Addresses']
-      users.find_each do |user|
-        addresses = user.addresses.map do |address|
-          [
-            address.plot_no,
-            address.society_name,
-            address.pincode,
-            address.state.name,
-            address.city.name
-          ].join(', ')
-        end.join(' || ')
-        csv << [
-          user.id,
-          user.first_name,
-          user.last_name,
-          user.email,
-          user.gender,
-          user.hobbies.join(', '),
-          addresses
-        ]
-      end
-    end
+  def add_csv_headers(csv)
+    csv << ['ID', 'First Name', 'Last Name', 'Email', 'Gender', 'Avatar', 'Hobbies', 'Addresses']
+  end
+
+  def generate_user_row(user)
+    addresses = user.addresses.map do |address|
+      [
+        address.plot_no,
+        address.society_name,
+        address.pincode,
+        address.state.name,
+        address.city.name
+      ].join(', ')
+    end.join(' || ')
+    [
+      user.id,
+      user.first_name,
+      user.last_name,
+      user.email,
+      user.gender,
+      user.hobbies.join(', '),
+      addresses
+    ]
   end
 end

@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     collection do
       get :export_csv
     end
+    member do
+      get :export_csv_for_user, defaults: { format: 'csv' }
+    end
   end
 
   namespace :api do
