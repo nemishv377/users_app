@@ -1,4 +1,5 @@
 class City < ApplicationRecord
+  include DeepCloneable
   belongs_to :state
   has_many :addresses
   default_scope -> { order(:name) }

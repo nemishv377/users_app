@@ -98,3 +98,5 @@ gem 'omniauth-github', '~> 2.0.0'
 gem 'omniauth-facebook'
 # LinkedIn Authentication
 gem 'omniauth-linkedin-openid'
+
+gem 'deep_cloneable', '~> 3.2.0'

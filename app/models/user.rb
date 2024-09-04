@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   rolify
+  include DeepCloneable
   # has_secure_password
   after_create :assign_default_role, :send_welcome_email
 
