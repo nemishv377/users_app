@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show edit update destroy export_csv_for_user]
+  before_action :set_user, only: %i[show edit update destroy export_csv_for_user clone]
   load_and_authorize_resource
 
   # GET /users or /users.json
@@ -17,6 +17,7 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
+    @cloned_user = @user.deep_clone(include: :addresses)
     @default_address = @user.addresses.default.first
   end
 
@@ -55,6 +56,15 @@ class UsersController < ApplicationController
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def clone
+    set_cloned_user(@user)
+    if @cloned_user.save(validate: false)
+      redirect_to root_path, notice: 'User successfully cloned.'
+    else
+      redirect_to root_path, alert: 'Failed to clone user.'
     end
   end
 
@@ -105,5 +115,11 @@ class UsersController < ApplicationController
     else
       redirect_to users_path, alert: 'You are not authorized to access that page.'
     end
+  end
+
+  def set_cloned_user(user)
+    @cloned_user = user.deep_clone(include: :addresses)
+    @cloned_user.first_name = user.first_name + '_' + user.id.to_s
+    @cloned_user.last_name = user.last_name + '_' + user.id.to_s
   end
 end
