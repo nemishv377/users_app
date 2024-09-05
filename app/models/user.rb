@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   rolify
   include DeepCloneable
+  include Discard::Model
   # has_secure_password
   after_create :assign_default_role, :send_welcome_email
 
@@ -32,6 +33,10 @@ class User < ApplicationRecord
     return unless avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
 
     errors.add(:avatar, 'must be a JPEG or PNG')
+  end
+
+  def active_for_authentication?
+    super && !discarded?
   end
 
   def self.from_google(auth)

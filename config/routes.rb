@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     end
     member do
       get :export_csv_for_user, defaults: { format: 'csv' }
+      post :activate
+      post :deactivate
     end
   end
 

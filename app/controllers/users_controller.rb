@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show edit update destroy export_csv_for_user]
+  before_action :set_user, only: %i[edit update destroy export_csv_for_user activate deactivate]
   load_and_authorize_resource
 
   # GET /users or /users.json
@@ -17,6 +17,8 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
+    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
+    @user = @user.decorate
     @default_address = @user.addresses.default.first
   end
 
@@ -67,6 +69,23 @@ class UsersController < ApplicationController
     end
   end
 
+  # Use `deactivate` for soft delete
+  def deactivate
+    if @user.discard
+      redirect_to users_path, notice: 'User was successfully deactivate.'
+    else
+      redirect_to users_path, alert: 'Failed to discard the user.'
+    end
+  end
+
+  def activate
+    if @user.undiscard
+      redirect_to users_path, notice: 'User activated successfully.'
+    else
+      redirect_to users_path, alert: 'Failed to restore user.'
+    end
+  end
+
   def export_csv
     csv_data = CsvExportService.new(User.includes(addresses: %i[state city]).all).generate_csv
     respond_to do |format|
@@ -87,7 +106,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
+    @user = User.find_by(id: params[:id])
     return if @user.nil?
 
     @user = @user.decorate

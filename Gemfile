@@ -100,3 +100,5 @@ gem 'omniauth-facebook'
 gem 'omniauth-linkedin-openid'
 
 gem 'deep_cloneable', '~> 3.2.0'
+
+gem 'discard', '~> 1.2'

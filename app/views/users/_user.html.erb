@@ -21,10 +21,22 @@
     <td> <%= link_to "Show", user_path(user), class: "ml-2 rounded-lg py-3 px-3 bg-gray-300 inline-block font-medium" %> </td>
     <td> <%= link_to "Edit", edit_user_path(user), class: "ml-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %> </td>
     <td>
+      <% if user.discarded? %>
+        <%= button_to "Activate", activate_user_path(user), data: {
+                turbo_confirm: "Are you sure?\nUser will be activate!!"
+              }, class: "rounded-lg py-3 px-3 bg-green-500 text-white font-medium"%>
+      <% else %>
+        <%= button_to "Deactivate", deactivate_user_path(user), data: {
+                turbo_confirm: "Are you sure?\nUser will be deactivate!!"
+              }, class: "rounded-lg py-3 px-3 bg-red-100 font-medium text-red-700" %>
+
+      <% end %>
+    </td>
+    <td>
       <%= link_to "Delete", user_path(user), data: {
                   turbo_method: :delete,
                   turbo_confirm: "Are you sure?"
-                  }, class: "ml-2 rounded-lg py-3 px-3 text-white bg-red-500 font-medium" %>
+                  }, class: "rounded-lg py-3 px-3 text-white bg-red-500 font-medium" %>
     </td>
   </tr>
 
