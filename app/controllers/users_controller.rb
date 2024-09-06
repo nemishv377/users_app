@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
   before_action :authenticate_user!
-  before_action :set_user, only: %i[show edit update destroy export_csv_for_user clone]
+  before_action :set_user, only: %i[edit update destroy export_csv_for_user clone]
   load_and_authorize_resource
 
   # GET /users or /users.json
@@ -17,7 +17,8 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
-    @cloned_user = @user.deep_clone(include: :addresses)
+    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
+    @user = @user.decorate
     @default_address = @user.addresses.default.first
   end
 
@@ -60,11 +61,21 @@ class UsersController < ApplicationController
   end
 
   def clone
-    set_cloned_user(@user)
-    if @cloned_user.save(validate: false)
-      redirect_to root_path, notice: 'User successfully cloned.'
-    else
-      redirect_to root_path, alert: 'Failed to clone user.'
+    @cloned_user = @user.deep_clone(include: :addresses)
+    update_cloned_user_attributes
+    if User.exists?(email: @cloned_user.email)
+      flash[:alert] = 'User is already cloned.'
+      redirect_to users_path and return
+    end
+    @user = @cloned_user
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to user_url(@user), notice: 'User was successfully created.' }
+        format.json { render :show, status: :created, location: @user }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -97,7 +108,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
+    @user = User.includes(:addresses).find_by(id: params[:id])
     return if @user.nil?
 
     @user = @user.decorate
@@ -105,8 +116,8 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, hobbies: [],
-                                                                                    addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
+    params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, :password, :password_confirmation, hobbies: [],
+                                                                                                                       addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
   end
 
   def user_not_found
@@ -117,9 +128,9 @@ class UsersController < ApplicationController
     end
   end
 
-  def set_cloned_user(user)
-    @cloned_user = user.deep_clone(include: :addresses)
-    @cloned_user.first_name = user.first_name + '_' + user.id.to_s
-    @cloned_user.last_name = user.last_name + '_' + user.id.to_s
+  def update_cloned_user_attributes
+    @cloned_user.first_name = "#{@user.first_name}_#{@user.id}"
+    @cloned_user.last_name = "#{@user.last_name}_#{@user.id}"
+    @cloned_user.email = "#{@user.id}_clone_#{@user.email}"
   end
 end

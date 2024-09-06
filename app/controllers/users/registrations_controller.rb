@@ -3,6 +3,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
+  skip_before_action :require_no_authentication, only: %i[new create]
 
   # GET /resource/sign_up
   def new
@@ -12,9 +13,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    build_resource(sign_up_params)
+    resource.skip_password_validation = true
+    if resource.save
+      redirect_to users_path, notice: 'User was successfully created.'
+    else
+      render new_user_path, status: :unprocessable_entity
+    end
+  end
 
   # GET /resource/edit
   # def edit
