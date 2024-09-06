@@ -56,20 +56,19 @@
     <% end %>
 
     <% if current_user.has_role? :admin %>
-      <%= link_to "Edit", edit_user_path(user), class: "mt-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %>
+      <%= link_to "Edit", edit_user_path(user), class: "mt-2 rounded-lg py-2 px-5 bg-teal-300 inline-block font-medium" %>
     <% end %>
 
     <%= link_to "Delete", user_path(user), data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
-              }, class: "rounded-lg py-3 px-3 bg-red-500 font-medium text-white" %>
-    <%= link_to "Back", root_path, class: "rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
+              }, class: "rounded-lg py-2 px-3 bg-red-500 inline-block font-medium text-white" %>
+    <%= link_to "Back", root_path, class: "rounded-lg py-2 px-5 bg-gray-300 inline-block font-medium" %>
   </div>
 
   <div style="display: flex; flex-direction: column; align-items: center;">  
     <% if user.avatar.attached? %>
-      <img src="<%= (url_for(user.avatar)) %>" alt="" width="200" height="180">
-      <%# link_to "Download image", rails_blob_path(user.avatar, disposition: "attachment") %>
+      <img src="<%= (url_for(user.avatar)) %>" alt="" width="200" height="180">      
     <% else %>
       <img src="" alt="Please upload your Profile Avatar" width="200" height="180">
     <% end %>

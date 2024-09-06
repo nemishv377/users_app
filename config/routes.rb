@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     member do
       get :export_csv_for_user, defaults: { format: 'csv' }
       get 'clone'
+      post 'create_clone'
     end
   end
 

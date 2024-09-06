@@ -68,9 +68,16 @@ class UsersController < ApplicationController
       redirect_to users_path and return
     end
     @user = @cloned_user
+    render :new
+  end
+
+  def create_clone
+    @cloned_user = @user.deep_clone(include: :addresses)
+    update_cloned_user_attributes
+    @user = @cloned_user
     respond_to do |format|
-      if @user.save
-        format.html { redirect_to user_url(@user), notice: 'User was successfully created.' }
+      if @user.save(validate: false)
+        format.html { redirect_to root_path, notice: 'User was successfully cloned.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }

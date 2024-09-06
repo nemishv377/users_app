@@ -5,8 +5,8 @@
       <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p> 
     <% end %>
   <h1 class="font-bold text-4xl">Editing user</h1>
-  <%= form_for(@user, url: user_path(@user)) do |form| %>
-    <%= render 'devise/registrations/form', form: form, user: @user %>
+  <%= form_for(@user, method: :patch) do |form| %>
+    <%= render form, form: form, user: @user %>
   <%= form.submit "Update" %>
     <%= link_to "Back", root_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
   <%= link_to "Show this user", @user, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
