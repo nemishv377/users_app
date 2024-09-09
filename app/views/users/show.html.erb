@@ -1,1 +1,48 @@
 <%= render "show", user: @user %>
+<%if current_user.has_role? :admin %>
+  <div class="relative top-0 right-0 transform -translate-y-5" style="width:800px; hieght:800px;">
+    
+      <h3 class="font-bold text-3xl">Clone user will be</h3>
+      <hr class="w-64 h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
+      <table id="show_table">
+        <tr>
+          <th><strong>First name </strong></th>
+          <td>: <%= @user.first_name + '_' + @user.id.to_s%></td>
+        </tr>
+        <tr>
+          <th><strong>Last name </strong></th>
+          <td>: <%= @user.last_name + '_' + @user.id.to_s %></td>
+        </tr>
+        <tr>
+          <th><strong>Email </strong></th>
+          <td>: <%= @user.id.to_s + '_clone_' + @user.email %></td>
+        </tr>
+        <tr>
+          <th><strong>Gender  </strong></th>
+          <td>: <%= @user.gender %></td>
+        </tr>
+        <tr>
+          <th><strong>Hobby  </strong></th>
+          <td>:  <%= @user.hobbies.join(", ") %></td>
+        </tr>
+        <% @user.addresses.each do |address| %>
+          <% if address.default %>
+            <% address = address.decorate %>
+            <tr>
+              <th><strong>Permanent Address  </strong></th>
+              <td>: <%= address.full_address %></td>
+            </tr>
+            <tr>
+              <th>State</th>
+              <td>: <%= address.state.name %></td>
+            </tr>
+            <tr>
+              <th>City  </th>
+              <td>: <%= address.city.name %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+    <%= link_to 'To save this clone version click here', clone_user_path, class: 'btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+  </div>
+<% end %>

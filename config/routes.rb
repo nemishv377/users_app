@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       get :export_csv_for_user, defaults: { format: 'csv' }
       post :activate
       post :deactivate
+      get 'clone'
+      post 'create_clone'
     end
   end
 
@@ -39,5 +41,4 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root 'users#index'
-  match '*path', to: 'application#render_404', via: :all
 end

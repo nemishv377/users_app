@@ -88,11 +88,23 @@
     <em>(<%= @minimum_password_length %> characters minimum)</em>
     <% end %><br />
     <%= form.password_field :password, autocomplete: "new-password", class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    
+    <% if user.errors.full_messages_for(:password) %>
+      <div class="text-red-500 font-medium rounded ">
+        <%= user.errors.full_messages_for(:password)[0] %>
+      </div>
+    <% end %>
   </div>
 
   <div class="my-5">
     <%= form.label :password_confirmation %><br />
     <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    
+    <% if user.errors.full_messages_for(:password_confirmation) %>
+      <div class="text-red-500 font-medium rounded ">
+        <%= user.errors.full_messages_for(:password_confirmation)[0] %>
+      </div>
+    <% end %>
   </div>
   
   <%# ============================ Nested address form ==================================== %>

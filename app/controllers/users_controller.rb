@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
   before_action :authenticate_user!
-  before_action :set_user, only: %i[edit update destroy export_csv_for_user activate deactivate]
+  before_action :set_user, only: %i[edit update destroy export_csv_for_user clone activate deactivate]
   load_and_authorize_resource
 
   # GET /users or /users.json
@@ -60,6 +60,32 @@ class UsersController < ApplicationController
     end
   end
 
+  def clone
+    @cloned_user = @user.deep_clone(include: :addresses)
+    update_cloned_user_attributes
+    if User.exists?(email: @cloned_user.email)
+      flash[:alert] = 'User is already cloned.'
+      redirect_to users_path and return
+    end
+    @user = @cloned_user
+    render :new
+  end
+
+  def create_clone
+    @cloned_user = @user.deep_clone(include: :addresses)
+    update_cloned_user_attributes
+    @user = @cloned_user
+    respond_to do |format|
+      if @user.save(validate: false)
+        format.html { redirect_to root_path, notice: 'User was successfully cloned.' }
+        format.json { render :show, status: :created, location: @user }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /users/1 or /users/1.json
   def destroy
     @user.destroy!
@@ -106,7 +132,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.find_by(id: params[:id])
+    @user = User.includes(:addresses).find_by(id: params[:id])
     return if @user.nil?
 
     @user = @user.decorate
@@ -114,8 +140,8 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, hobbies: [],
-                                                                                    addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
+    params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, :password, :password_confirmation, hobbies: [],
+                                                                                                                       addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
   end
 
   def user_not_found
@@ -124,5 +150,14 @@ class UsersController < ApplicationController
     else
       redirect_to users_path, alert: 'You are not authorized to access that page.'
     end
+  end
+
+  def update_cloned_user_attributes
+    @cloned_user.first_name = "#{@user.first_name}_#{@user.id}"
+    @cloned_user.last_name = "#{@user.last_name}_#{@user.id}"
+    @cloned_user.email = "#{@user.id}_clone_#{@user.email}"
+    return unless @user.avatar.attached?
+
+    @cloned_user.avatar.attach(@user.avatar.blob)
   end
 end

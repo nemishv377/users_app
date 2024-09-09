@@ -29,6 +29,15 @@ class User < ApplicationRecord
   validate :profile_avatar_content_type
   validate :must_have_at_least_one_address
 
+  attr_accessor :skip_password_validation
+
+  # Override Devise's method to add custom validation skipping
+  def password_required?
+    return false if skip_password_validation
+
+    super
+  end
+
   def profile_avatar_content_type
     return unless avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
 
