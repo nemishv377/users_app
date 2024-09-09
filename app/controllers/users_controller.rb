@@ -139,5 +139,8 @@ class UsersController < ApplicationController
     @cloned_user.first_name = "#{@user.first_name}_#{@user.id}"
     @cloned_user.last_name = "#{@user.last_name}_#{@user.id}"
     @cloned_user.email = "#{@user.id}_clone_#{@user.email}"
+    return unless @user.avatar.attached?
+
+    @cloned_user.avatar.attach(@user.avatar.blob)
   end
 end
