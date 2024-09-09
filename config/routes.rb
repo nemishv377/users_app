@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post :activate
       post :deactivate
       get 'clone'
+      patch 'avatar', to: 'users#update_avatar'
       post 'create_clone'
     end
   end

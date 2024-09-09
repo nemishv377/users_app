@@ -3,7 +3,8 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
   before_action :authenticate_user!
-  before_action :set_user, only: %i[edit update destroy export_csv_for_user clone activate deactivate]
+  before_action :set_user,
+                only: %i[edit update destroy export_csv_for_user clone create_clone update_avatar activate deactivate]
   # load_and_authorize_resource
 
   # GET /users or /users.json
@@ -62,6 +63,15 @@ class UsersController < ApplicationController
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def update_avatar
+    if @user.update(user_params)
+      redirect_to @user, notice: 'Avatar was successfully updated.'
+    else
+      @user.avatar.purge
+      render :show, status: :unprocessable_entity, error: 'must be a JPEG or PNG'
     end
   end
 

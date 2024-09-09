@@ -11,7 +11,7 @@
         </tr>
         <tr>
           <th><strong>Last name </strong></th>
-          <td>: <%= @user.last_name + '_' + @user.id.to_s %></td>
+          <td>: <%= @user.last_name || '' + '_' + @user.id.to_s %></td>
         </tr>
         <tr>
           <th><strong>Email </strong></th>

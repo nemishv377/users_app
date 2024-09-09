@@ -1,0 +1,12 @@
+<%= form_with(model: user, url: avatar_user_path(user), method: :patch, local: true, multipart: true) do |form| %>
+  <div class="my-5">
+    <strong><%= form.label :avatar, "Profile Avatar" %></strong>
+    <%= form.file_field :avatar ,accept: 'image/jpeg, image/png', class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2" %> 
+    <% if user.errors[:avatar].any? %>
+      <div class="text-red-500 font-medium rounded">
+        <%= user.errors[:avatar][0] %>
+      </div>
+    <% end %>
+  </div>
+  <%= form.submit "Upload Avatar", class: "bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" %>
+<% end %>
