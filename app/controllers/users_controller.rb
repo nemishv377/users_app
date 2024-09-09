@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_user, only: %i[edit update destroy export_csv_for_user clone activate deactivate]
-  load_and_authorize_resource
+  # load_and_authorize_resource
 
   # GET /users or /users.json
   def index
@@ -17,7 +17,12 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
-    @user = User.includes(addresses: %i[state city]).find_by(id: params[:id])
+    @user = User.includes(addresses: %i[state city]).friendly.find(params[:id])
+    if current_user.has_role? :admin
+      authorize! :manage, :all
+    else
+      authorize! :manage, @user
+    end
     @user = @user.decorate
     @default_address = @user.addresses.default.first
   end
@@ -132,7 +137,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(:addresses).find_by(id: params[:id])
+    @user = User.includes(:addresses).friendly.find(params[:id])
     return if @user.nil?
 
     @user = @user.decorate

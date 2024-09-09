@@ -3,6 +3,9 @@ class User < ApplicationRecord
   include DeepCloneable
   include Discard::Model
   # has_secure_password
+  extend FriendlyId
+  friendly_id :full_name, use: :slugged
+
   after_create :assign_default_role, :send_welcome_email
 
   # Include default devise modules. Others available are:
@@ -97,5 +100,13 @@ class User < ApplicationRecord
     return unless addresses.empty?
 
     errors.add(:addresses, 'must have at least one valid address')
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def should_generate_new_friendly_id?
+    slug.blank? || first_name_changed? || last_name_changed?
   end
 end
