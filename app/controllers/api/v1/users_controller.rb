@@ -4,20 +4,34 @@ module Api
       before_action :authorize_admin!, only: [:create]
       before_action :set_user, only: %i[show update destroy]
       before_action :check_user_params, only: %i[create update]
+      before_action :authorize_user, only: %i[update destroy]
       def index
-        page = (params[:page].to_i.positive? ? params[:page].to_i : 1)
-        @pagy, @users = pagy(User.includes(addresses: %i[state city]).all, page:)
-        return unless @pagy.page > @pagy.pages || @pagy.page < 1
+        @pagy, @users = pagy(User.includes(addresses: %i[state city]))
+        # render 'api/v1/users/index', formats: [:json]
+        serialized_users = UserSerializer.new(@users, include: [:addresses]).serializable_hash
+        pagination_metadata = {
+          current_page: @pagy.page,
+          next_page: @pagy.next,
+          prev_page: @pagy.prev,
+          total_pages: @pagy.pages,
+          items_count: @pagy.count
+        }
 
-        @pagy, @users = pagy(User.includes(addresses: %i[state city]),
-                             page: @pagy.pages)
-        render 'api/v1/users/index', formats: [:json]
+        # Combine both into one response
+        response = {
+          pagination: pagination_metadata,
+          users: serialized_users
+        }
+
+        render json: response.to_json
+        # render json: UserSerializer.new(@users, include: [:addresses]).serializable_hash.to_json
       end
 
       def create
         @user = ::CreateUser.new(user_params).call
         if @user.save
-          render 'api/v1/users/show', formats: [:json]
+          # render 'api/v1/users/show', formats: [:json]
+          render json: UserSerializer.new(@user, { include: [:addresses] }).serializable_hash.to_json, status: :ok
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -28,7 +42,8 @@ module Api
           render json: { error: 'User not found with this id.' }, status: :not_found
         # elsif (current_user.has_role? :admin) || (@user == current_user)
         elsif AuthorizeUser.new(current_user, @user, :admin).call
-          render 'api/v1/users/show', formats: [:json]
+          # render 'api/v1/users/show', formats: [:json]
+          render json: UserSerializer.new(@user,  { include: [:addresses] }).serializable_hash.to_json, status: :ok
         elsif !(current_user.has_role? :admin) && !(@user == current_user)
           render json: { error: 'You are not authorized.' }, status: :not_found
         end
@@ -36,7 +51,8 @@ module Api
 
       def update
         if @user.update(user_params)
-          render 'api/v1/users/show', formats: [:json]
+          # render 'api/v1/users/show', formats: [:json]
+          render json: UserSerializer.new(@user, { include: [:addresses] }).serializable_hash.to_json, status: :ok
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -44,8 +60,11 @@ module Api
 
       # DELETE /users/1 or /users/1.json
       def destroy
-        @user.destroy!
-        render json: { notice: 'User was successfully destroyed.' }
+        if @user.destroy!
+          render json: { notice: 'User was successfully destroyed.' }, status: :ok
+        else
+          render json: { error: 'Failed to destroy the user.' }, status: :unprocessable_entity
+        end
       end
 
       private
@@ -68,6 +87,15 @@ module Api
         return if params[:user].present?
 
         render json: { message: 'User data is required.' }, status: :unprocessable_entity
+      end
+
+      def authorize_user
+        if @user.nil?
+          error_message = current_user.has_role?(:admin) ? 'User not found with this id.' : 'You are not authorized.'
+          render json: { error: error_message }, status: :not_found
+        elsif !current_user.has_role?(:admin) && @user != current_user
+          render json: { error: 'You are not authorized.' }, status: :forbidden
+        end
       end
     end
   end

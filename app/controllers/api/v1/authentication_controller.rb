@@ -13,7 +13,8 @@ module Api
           if signup_result[:error]
             render json: signup_result[:error], status: :unprocessable_entity
           else
-            render signup_result[:user], formats: [:json]
+            # render signup_result[:user], formats: [:json]
+            render json: UserSerializer.new(signup_result[:user], { include: [:addresses] }).serializable_hash.to_json
           end
         end
       end

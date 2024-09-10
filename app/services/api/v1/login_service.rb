@@ -15,8 +15,8 @@ module Api
           exp_time = 24.hours.from_now
           {
             token:,
-            exp: exp_time.strftime('%m-%d-%Y %H:%M'),
-            user:
+            exp: exp_time.strftime('%d-%m-%Y %H:%M'),
+            user: UserSerializer.new(user, { include: [:addresses] }).serializable_hash
           }
         else
           { error: 'Invalid email or password.' }

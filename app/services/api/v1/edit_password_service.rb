@@ -13,7 +13,8 @@ module Api
         return { error: 'Invalid or expired token' } if user.nil?
 
         if user.update(password:, reset_password_token: nil)
-          { user:, message: 'Password successfully updated' }
+          { message: 'Password successfully updated',
+            user: UserSerializer.new(user, { include: [:addresses] }).serializable_hash }
         else
           { error: 'Unable to update password' }
         end

@@ -81,6 +81,7 @@ gem 'letter_opener'
 gem 'rolify'
 
 # Use JWT gem for token-based authentication
+gem 'business_process'
 gem 'jwt'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
@@ -104,3 +105,5 @@ gem 'deep_cloneable', '~> 3.2.0'
 gem 'discard', '~> 1.2'
 
 gem 'friendly_id', '~> 5.5.0'
+
+gem 'jsonapi-serializer'
