@@ -31,7 +31,7 @@ module Api
         @user = ::CreateUser.new(user_params).call
         if @user.save
           # render 'api/v1/users/show', formats: [:json]
-          render json: UserSerializer.new(@user, { include: [:addresses] }).serializable_hash.to_json, status: :ok
+          render json: serialized_user, status: :ok
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -43,7 +43,7 @@ module Api
         # elsif (current_user.has_role? :admin) || (@user == current_user)
         elsif AuthorizeUser.new(current_user, @user, :admin).call
           # render 'api/v1/users/show', formats: [:json]
-          render json: UserSerializer.new(@user,  { include: [:addresses] }).serializable_hash.to_json, status: :ok
+          render json: serialized_user, status: :ok
         elsif !(current_user.has_role? :admin) && !(@user == current_user)
           render json: { error: 'You are not authorized.' }, status: :not_found
         end
@@ -52,7 +52,7 @@ module Api
       def update
         if @user.update(user_params)
           # render 'api/v1/users/show', formats: [:json]
-          render json: UserSerializer.new(@user, { include: [:addresses] }).serializable_hash.to_json, status: :ok
+          render json: serialized_user, status: :ok
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -96,6 +96,10 @@ module Api
         elsif !current_user.has_role?(:admin) && @user != current_user
           render json: { error: 'You are not authorized.' }, status: :forbidden
         end
+      end
+
+      def serialized_user
+        UserSerializer.new(@user, { include: [:addresses] }).serializable_hash
       end
     end
   end
