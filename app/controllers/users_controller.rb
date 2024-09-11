@@ -5,6 +5,10 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user,
                 only: %i[edit update destroy export_csv_for_user clone create_clone update_avatar activate deactivate]
+  before_action :authorize_user,
+                only: %i[edit update destroy clone create_clone update_avatar deactivate activate
+                         export_csv_for_user]
+
   # load_and_authorize_resource
 
   # GET /users or /users.json
@@ -19,17 +23,14 @@ class UsersController < ApplicationController
   # GET /users/1 or /users/1.json
   def show
     @user = User.includes(addresses: %i[state city]).friendly.find(params[:id])
-    if current_user.has_role? :admin
-      authorize! :manage, :all
-    else
-      authorize! :manage, @user
-    end
+    authorize @user
     @user = @user.decorate
     @default_address = @user.addresses.default.first
   end
 
   # GET /users/new
   def new
+    authorize current_user
     @user = User.new
     @user.addresses.build
   end
@@ -41,6 +42,7 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
+    authorize current_user
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save
@@ -83,7 +85,7 @@ class UsersController < ApplicationController
       redirect_to users_path and return
     end
     @user = @cloned_user
-    render :new
+    render 'new_clone'
   end
 
   def create_clone
@@ -128,6 +130,7 @@ class UsersController < ApplicationController
   end
 
   def export_csv
+    authorize current_user
     csv_data = CsvExportService.new(User.includes(addresses: %i[state city]).all).generate_csv
     respond_to do |format|
       format.csv do
@@ -174,5 +177,9 @@ class UsersController < ApplicationController
     return unless @user.avatar.attached?
 
     @cloned_user.avatar.attach(@user.avatar.blob)
+  end
+
+  def authorize_user
+    authorize @user
   end
 end

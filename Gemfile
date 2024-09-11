@@ -107,3 +107,5 @@ gem 'discard', '~> 1.2'
 gem 'friendly_id', '~> 5.5.0'
 
 gem 'jsonapi-serializer'
+
+gem 'pundit'

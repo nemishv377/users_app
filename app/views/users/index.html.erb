@@ -25,7 +25,7 @@
     <div class="mt-5 flex justify-between items-center">
       <h1 class="font-bold text-4xl">All Users</h1>
       <div class="flex flex-col items-end w-auto">
-        <%# link_to "Create new user", new_user_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium text-center" %>
+        <%= link_to "Create new user", new_user_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium text-center" %>
         <%= link_to 'Download Users Data as CSV', export_csv_users_path(format: :csv), class: 'inline-flex items-center py-2 border border-transparent text-base font-medium rounded-md text-blue-700 hover:underline', style: 'text-decoration-thickness: 2px;' %>
       </div>
     </div>
