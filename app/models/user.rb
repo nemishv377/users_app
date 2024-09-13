@@ -94,7 +94,7 @@ class User < ApplicationRecord
   def send_welcome_email
     SendWelcomeEmailJob.perform_in(10.seconds, id)
     # SendUserWelcomeEmailJob.perform_later(self)
-    UserMailer.welcome_email(self).deliver_later(wait: 12.seconds)
+    # UserMailer.welcome_email(self).deliver_later(wait: 12.seconds)
   end
 
   def must_have_at_least_one_address

@@ -13,15 +13,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # POST /resource
-  def create
-    build_resource(sign_up_params)
-    resource.skip_password_validation = true
-    if resource.save
-      redirect_to users_path, notice: 'User was successfully created.'
-    else
-      render new_user_path, status: :unprocessable_entity
-    end
-  end
+  # def create
+  # end
 
   # GET /resource/edit
   # def edit

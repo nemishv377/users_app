@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
   include Pundit::Authorization
+  after_action :verify_pundit_authorization, unless: :devise_controller?
+
+  def verify_pundit_authorization
+    action_name == 'index' ? verify_policy_scoped : verify_authorized
+  end
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 

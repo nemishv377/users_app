@@ -14,15 +14,15 @@ class UsersController < ApplicationController
   # GET /users or /users.json
   def index
     page = (params[:page].to_i > 0 ? params[:page].to_i : 1)
-    @pagy, @users = pagy(User.includes(addresses: %i[state city]).all, page:)
+    @pagy, @users = pagy(policy_scope(User).includes(addresses: %i[state city]).all, page:)
     return unless @pagy.page > @pagy.pages || @pagy.page < 1
 
-    @pagy, @users = pagy(User.includes(addresses: %i[state city]), page: @pagy.pages)
+    @pagy, @users = pagy(policy_scope(User).includes(addresses: %i[state city]), page: @pagy.pages)
   end
 
   # GET /users/1 or /users/1.json
   def show
-    @user = User.includes(addresses: %i[state city]).friendly.find(params[:id])
+    @user = policy_scope(User).includes(addresses: %i[state city]).friendly.find(params[:id])
     authorize @user
     MyFirstJob.perform_async(@user.id)
     @user = @user.decorate
@@ -132,7 +132,7 @@ class UsersController < ApplicationController
 
   def export_csv
     authorize current_user
-    csv_data = CsvExportService.new(User.includes(addresses: %i[state city]).all).generate_csv
+    csv_data = CsvExportService.new(policy_scope(User).includes(addresses: %i[state city]).all).generate_csv
     respond_to do |format|
       format.csv do
         send_data csv_data, filename: "users-#{Date.today}.csv"
@@ -151,7 +151,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.includes(:addresses).friendly.find(params[:id])
+    @user = policy_scope(User).includes(:addresses).friendly.find(params[:id])
     return if @user.nil?
 
     @user = @user.decorate

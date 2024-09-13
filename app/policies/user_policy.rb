@@ -61,13 +61,9 @@ class UserPolicy < ApplicationPolicy
     user.has_role?(:admin)
   end
 
-  class Scope < Scope
+  class Scope < ApplicationPolicy::Scope
     def resolve
-      if user.has_role?(:admin)
-        scope.all
-      else
-        scope.where(id: user.id)
-      end
+      user.has_role?(:admin) ? scope.all : scope.where(id: user.id)
     end
   end
 end

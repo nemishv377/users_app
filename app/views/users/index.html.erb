@@ -9,7 +9,7 @@
     </div>
   </div>
   <% if user_signed_in? and !current_user.has_role? :admin %>
-    <% user = User.includes(addresses: %i[state city]).find_by(id: current_user.id).decorate %>
+    <% user = policy_scope(User).includes(addresses: %i[state city]).find_by(id: current_user.id).decorate %>
     <% @default_address = user.addresses.detect(&:default) %>
     <% if !@default_address.nil?  %>
       <% @default_address = @default_address.decorate %>
