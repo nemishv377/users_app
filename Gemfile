@@ -111,3 +111,5 @@ gem 'jsonapi-serializer'
 gem 'pundit'
 
 gem 'sidekiq', '~> 7.3'
+
+gem 'faraday'

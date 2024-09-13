@@ -8,53 +8,26 @@
     <table id="show_table">
       <tr>
         <th><strong>First name </strong></th>
-        <td>: <%= user.full_name %></td>
+        <td>: <%= user["name"] %></td>
       </tr>
       <tr>
         <th><strong>Email </strong></th>
-        <td>: <%= user.email %></td>
+        <td>: <%= user["email"] %></td>
       </tr>
       <tr>
         <th><strong>Gender  </strong></th>
-        <td>: <%= user.gender %></td>
-      </tr>
-      <tr>
-        <th><strong>Hobby  </strong></th>
-        <td>:  <%= user.hobbies.join(", ") %></td>
+        <td>: <%= user["gender"] %></td>
       </tr>
       
-      <% if @default_address %>
-        <% @default_address = @default_address.decorate %>
-        <tr>
-          <th><strong>Permanent Address  </strong></th>
-          <td>: <%= @default_address.full_address  %></td>
-        </tr>
-        <tr>
-          <th>State</th>
-          <td>: <%= @default_address.state.name %></td>
-        </tr>
-        <tr>
-          <th>City  </th>
-          <td>: <%= @default_address.city.name %></td>
-        </tr>
-      <% end %>
+      
+      
+      
 
-      <tfoot id="more_addresses" style="display:none;">
-        <% user_addresses = user.addresses.reject(&:default) %>
-        <% user_addresses.each do |address| %>
-          <%= render address %>
-        <% end %>
-      <tfoot>
+      
 
     </table>
 
-    <% if user_addresses.length>0 %>
-      <div id="show_addresses"> Show & Hide addresses </div>
-    <% end %>
-
-    <% if current_user.has_role? :admin %>
-      <%= link_to "Edit", edit_user_path(user), class: "mt-2 rounded-lg py-2 px-5 bg-teal-300 inline-block font-medium" %>
-    <% end %>
+    
 
     <%= link_to "Delete", user_path(user), data: {
                 turbo_method: :delete,
@@ -63,15 +36,7 @@
     <%= link_to "Back", root_path, class: "rounded-lg py-2 px-5 bg-gray-300 inline-block font-medium" %>
   </div>
 
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <% if user.persisted? && user.avatar.attached? %>
-      <%= image_tag user.avatar, alt: 'User Avatar', width: 200, height: 180 %>
-    <% else %>
-      <%= render 'edit_avatar', user: %>
-    <% end %>
-
-    <p>Joined on : <%= user.formatted_join_date %> </p>
-  </div>
+  
 
   <div class='mt-3'>
   </div>
@@ -80,11 +45,5 @@
 
 <script>
   
-  $(document).ready(function() {
-    $('#show_addresses').click(function() {
-      let user_addresses = <%= raw user.addresses.to_json %>
-      $("#more_addresses").toggle();
-    });
-  });
-  
+
 </script>

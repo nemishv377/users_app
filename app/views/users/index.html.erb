@@ -47,14 +47,10 @@
           <th>Delete</th>
         </tr>
         <% @users.each do |user| %>
-          <% default_address =  user.addresses.detect(&:default) %>
-          <% user_addresses = user.addresses.reject(&:default) %>
-          <%= render partial: 'user', locals: { user: user, default_address: default_address, user_addresses: user_addresses } %>
+          <%= render partial: 'user', locals: { user: user } %>
         <% end %>
       </table>
-      <div class="pag-bar mt-5 pt-5">
-        <%== pagy_bootstrap_nav(@pagy) %>
-      </div>
+      
     </div>
   <% end %>
 </div>

@@ -415,6 +415,7 @@ DEPENDENCIES
   discard (~> 1.2)
   dotenv-rails
   draper
+  faraday
   friendly_id (~> 5.5.0)
   importmap-rails
   jbuilder

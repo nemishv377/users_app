@@ -8,25 +8,41 @@ class UsersController < ApplicationController
   before_action :authorize_user,
                 only: %i[edit update destroy clone create_clone update_avatar deactivate activate
                          export_csv_for_user]
+  before_action :set_gorest_service
 
   # load_and_authorize_resource
 
   # GET /users or /users.json
   def index
-    page = (params[:page].to_i > 0 ? params[:page].to_i : 1)
-    @pagy, @users = pagy(policy_scope(User).includes(addresses: %i[state city]).all, page:)
-    return unless @pagy.page > @pagy.pages || @pagy.page < 1
+    @gorest_service = GorestService.new
+    response = Faraday.get('https://gorest.co.in/public/v2/users') do |req|
+      req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
+      req.headers['Content-Type'] = 'application/json'
+    end
 
-    @pagy, @users = pagy(policy_scope(User).includes(addresses: %i[state city]), page: @pagy.pages)
+    if response.success?
+      @users = JSON.parse(response.body)
+    else
+      @users = []
+      flash[:alert] = "Failed to fetch users: #{response.status}"
+    end
   end
 
   # GET /users/1 or /users/1.json
   def show
-    @user = policy_scope(User).includes(addresses: %i[state city]).friendly.find(params[:id])
-    authorize @user
-    MyFirstJob.perform_async(@user.id)
-    @user = @user.decorate
-    @default_address = @user.addresses.default.first
+    user_id = params[:id].to_i
+    response = Faraday.get("https://gorest.co.in/public/v2/users/#{user_id}") do |req|
+      req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
+      req.headers['Content-Type'] = 'application/json'
+    end
+    if response.success?
+      @users = JSON.parse(response.body)
+    else
+      @users = []
+      flash[:alert] = "Failed to fetch users: #{response.status}"
+    end
+    @user = JSON.parse(response.body)
+    puts "response.body#{response.body}"
   end
 
   # GET /users/new
@@ -190,5 +206,9 @@ class UsersController < ApplicationController
       token = SecureRandom.hex(16)
       break token unless User.exists?(reset_password_token: token)
     end
+  end
+
+  def set_gorest_service
+    @gorest_service = GorestService.new
   end
 end
