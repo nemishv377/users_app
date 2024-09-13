@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions',
                                     omniauth_callbacks: 'users/omniauth_callbacks' }
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   resources :users do
     collection do
       get :export_csv
@@ -15,6 +18,7 @@ Rails.application.routes.draw do
       post 'create_clone'
     end
   end
+  post 'admin/users', to: 'users#create', as: 'admin_create_user'
 
   namespace :api do
     namespace :v1, defaults: { format: :json } do

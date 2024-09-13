@@ -109,3 +109,5 @@ gem 'friendly_id', '~> 5.5.0'
 gem 'jsonapi-serializer'
 
 gem 'pundit'
+
+gem 'sidekiq', '~> 7.3'

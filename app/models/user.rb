@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
   has_many :addresses, dependent: :destroy
-  serialize :hobbies, Array, coder: YAML
+  serialize :hobbies, type: Array, coder: YAML
   accepts_nested_attributes_for :addresses, allow_destroy: true
 
   VALID_GENDERS = %w[Male Female Other]
@@ -92,8 +92,9 @@ class User < ApplicationRecord
   end
 
   def send_welcome_email
-    SendUserWelcomeEmailJob.perform_later(self)
-    # UserMailer.welcome_email(self).deliver_later
+    SendWelcomeEmailJob.perform_in(10.seconds, id)
+    # SendUserWelcomeEmailJob.perform_later(self)
+    UserMailer.welcome_email(self).deliver_later(wait: 12.seconds)
   end
 
   def must_have_at_least_one_address

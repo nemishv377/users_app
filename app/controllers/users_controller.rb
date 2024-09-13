@@ -24,6 +24,7 @@ class UsersController < ApplicationController
   def show
     @user = User.includes(addresses: %i[state city]).friendly.find(params[:id])
     authorize @user
+    MyFirstJob.perform_async(@user.id)
     @user = @user.decorate
     @default_address = @user.addresses.default.first
   end
