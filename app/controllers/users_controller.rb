@@ -92,6 +92,7 @@ class UsersController < ApplicationController
   def create_clone
     @cloned_user = @user.deep_clone(include: :addresses)
     update_cloned_user_attributes
+    @cloned_user.reset_password_token = generate_unique_token
     @user = @cloned_user
     respond_to do |format|
       if @user.save(validate: false)
@@ -182,5 +183,12 @@ class UsersController < ApplicationController
 
   def authorize_user
     authorize @user
+  end
+
+  def generate_unique_token
+    loop do
+      token = SecureRandom.hex(16)
+      break token unless User.exists?(reset_password_token: token)
+    end
   end
 end
