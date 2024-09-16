@@ -5,11 +5,40 @@
       <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p> 
     <% end %>
   <h1 class="font-bold text-4xl">Editing user</h1>
-  <%= form_for(@user, method: :patch) do |form| %>
-    <%= render form, form: form, user: @user %>
+  <%= form_with model: @user, url: user_path(params[:id]), scope: :user, method: :patch, local: true do |form| %>
+    <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+
+  </div>
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div>
+  <div class="my-5" id="field">
+    <strong>Gender</strong><small>*</small>
+    <div id="field_div">
+      <div>
+        <%= form.radio_button :gender, "male" %>&nbsp;
+        <%= form.label :gender_male, "Male" %>
+      </div>
+      <div>
+        <%= form.radio_button :gender, "female" %>&nbsp;
+        <%= form.label :gender_female, "Female" %>
+      </div>
+      <div>
+        <%= form.radio_button :gender, "other" %>&nbsp;
+        <%= form.label :gender_other, "Other" %>
+      </div>
+    </div>
+  </div>
+  <div>
+    <%= form.label :status %>
+    <%= form.text_field :status %>
+  </div>
   <%= form.submit "Update" %>
     <%= link_to "Back", root_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-300 inline-block font-medium" %>
-  <%= link_to "Show this user", @user, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <%= link_to "Show this user",user_path(@user["id"]), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
 <% end %>
   
 </div>

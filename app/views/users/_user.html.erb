@@ -6,14 +6,11 @@
     <td class="my-5"> <%= user["email"] %> </td>
     <td class="my-5"> <%= user["gender"] %> </td>
     
-
-  
-
     <td> <%= link_to "Show", user_path(user["id"]), class: "ml-2 rounded-lg py-3 px-3 bg-gray-300 inline-block font-medium" %> </td>
     <td> <%= link_to "Edit", edit_user_path(user["id"]), class: "ml-2 rounded-lg py-3 px-5 bg-teal-300 inline-block font-medium" %> </td>
-    <td>
-      
-    </td>
+
+    <td class="my-5"> <%= user["status"] %> </td>
+
     <td>
       <%= link_to "Delete", user_path(user["id"]), data: {
                   turbo_method: :delete,

@@ -3,21 +3,16 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
   before_action :authenticate_user!
-  before_action :set_user,
-                only: %i[edit update destroy export_csv_for_user clone create_clone update_avatar activate deactivate]
-  before_action :authorize_user,
-                only: %i[edit update destroy clone create_clone update_avatar deactivate activate
-                         export_csv_for_user]
-  before_action :set_gorest_service
-
-  # load_and_authorize_resource
 
   # GET /users or /users.json
   def index
-    @gorest_service = GorestService.new
     response = Faraday.get('https://gorest.co.in/public/v2/users') do |req|
       req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
       req.headers['Content-Type'] = 'application/json'
+      req.options.timeout = 30
+      req.options.open_timeout = 10
+      req.params['page'] = 1
+      req.params['per_page'] = 20
     end
 
     if response.success?
@@ -34,11 +29,13 @@ class UsersController < ApplicationController
     response = Faraday.get("https://gorest.co.in/public/v2/users/#{user_id}") do |req|
       req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
       req.headers['Content-Type'] = 'application/json'
+      req.options.timeout = 30
+      req.options.open_timeout = 10
     end
     if response.success?
-      @users = JSON.parse(response.body)
+      @user = JSON.parse(response.body)
     else
-      @users = []
+      @user = []
       flash[:alert] = "Failed to fetch users: #{response.status}"
     end
     @user = JSON.parse(response.body)
@@ -47,41 +44,62 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    authorize current_user
-    @user = User.new
-    @user.addresses.build
+    @user = OpenStruct.new
   end
 
   # GET /users/1/edit
   def edit
-    @user.build_address if @user.addresses.nil?
+    user_id = params[:id].to_i
+    response = Faraday.get("https://gorest.co.in/public/v2/users/#{user_id}") do |req|
+      req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
+      req.headers['Content-Type'] = 'application/json'
+      req.options.timeout = 30
+      req.options.open_timeout = 10
+    end
+    if response.success?
+      user_data = JSON.parse(response.body)
+      @user = OpenStruct.new(user_data)
+    else
+      @user = []
+      flash[:alert] = "Failed to fetch users: #{response.status}"
+      redirect_to users_path
+    end
+    puts @user
   end
 
   # POST /users or /users.json
   def create
-    authorize current_user
-    @user = User.new(user_params)
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to user_url(@user), notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    response = create_user_in_third_party_api(user_params)
+
+    if response.is_a?(Faraday::Response) && response.success?
+      flash[:notice] = 'User created successfully in third-party system!'
+      redirect_to users_path
+    else
+      flash[:alert] = "Error creating user: #{response.body}"
+      redirect_to new_user_path
     end
   end
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    user_id = params[:id].to_i
+
+    response = Faraday.put("https://gorest.co.in/public/v2/users/#{user_id}") do |req|
+      req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
+      req.headers['Content-Type'] = 'application/json'
+      req.body = user_params.to_json
+      req.options.timeout = 30
+      req.options.open_timeout = 10
+    end
+
+    puts response.body
+
+    if response.is_a?(Faraday::Response) && response.success?
+      flash[:notice] = 'User updated successfully in third-party system!'
+      redirect_to users_path
+    else
+      flash[:alert] = "Error while editting user: #{response.body}"
+      redirect_to edit_user_path
     end
   end
 
@@ -123,10 +141,20 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @user.destroy!
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
+    user_id = params[:id].to_i
+    response = Faraday.delete("https://gorest.co.in/public/v2/users/#{user_id}") do |req|
+      req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
+      req.headers['Content-Type'] = 'application/json'
+      req.options.timeout = 30
+      req.options.open_timeout = 10
+    end
+    if response.success?
+      flash[:notice] = 'User deleted successfully from the third-party system.'
+      redirect_to users_path
+    else
+      error_message = JSON.parse(response.body)
+      flash[:alert] = "Error deleting user: #{error_message}"
+      redirect_to users_path
     end
   end
 
@@ -176,8 +204,7 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :gender, :avatar, :password, :password_confirmation, hobbies: [],
-                                                                                                                       addresses_attributes: %i[id plot_no society_name pincode state_id city_id default _destroy])
+    params.require(:user).permit(:name, :status, :email, :gender)
   end
 
   def user_not_found
@@ -208,7 +235,30 @@ class UsersController < ApplicationController
     end
   end
 
-  def set_gorest_service
-    @gorest_service = GorestService.new
+  def create_user_in_third_party_api(user_params)
+    api_url = 'https://gorest.co.in/public/v2/users'
+
+    begin
+      response = Faraday.post(api_url) do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.headers['Authorization'] = 'Bearer 12b90432857c3ff89e83e2da58a8c74242408725e56e11fc02631972d88d971b'
+        req.body = user_params.to_json
+        req.options.timeout = 30
+        req.options.open_timeout = 10
+      end
+      logger.info "API response status: #{response.status}"
+      logger.info "API response body: #{response.body}"
+    rescue Faraday::ConnectionFailed => e
+      logger.error "API connection failed: #{e.message}"
+      OpenStruct.new(success?: false, body: 'API connection failed')
+    rescue Faraday::TimeoutError => e
+      logger.error "API request timed out: #{e.message}"
+      OpenStruct.new(success?: false, body: 'API request timed out')
+    rescue StandardError => e
+      logger.error "An unexpected error occurred: #{e.message}"
+      OpenStruct.new(success?: false, body: 'Unexpected error')
+    end
+
+    response
   end
 end

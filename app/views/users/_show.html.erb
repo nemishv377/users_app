@@ -7,7 +7,7 @@
     <% end %>
     <table id="show_table">
       <tr>
-        <th><strong>First name </strong></th>
+        <th><strong>Name </strong></th>
         <td>: <%= user["name"] %></td>
       </tr>
       <tr>
@@ -18,15 +18,15 @@
         <th><strong>Gender  </strong></th>
         <td>: <%= user["gender"] %></td>
       </tr>
-      
-      
-      
-      
-
-      
+      <tr>
+        <th><strong>Status  </strong></th>
+        <td>: <%= user["status"] %></td>
+      </tr>
 
     </table>
-
+<% if current_user.has_role? :admin %>
+      <%= link_to "Edit", edit_user_path(user), class: "mt-2 rounded-lg py-2 px-5 bg-teal-300 inline-block font-medium" %>
+    <% end %>
     
 
     <%= link_to "Delete", user_path(user), data: {
