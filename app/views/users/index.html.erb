@@ -4,8 +4,8 @@
     <div class="flex flex-col items-end">
       <div ><strong> Welcome back!<br><%= current_user.decorate.full_name %> </strong></div> 
       <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "mt-2 rounded-lg py-2 px-3 bg-red-500 font-medium text-white" %>
-      <%= link_to "See Your Profile", user_path(current_user), class: "mt-2 rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium" %>
-      <%= link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-2 px-5 bg-teal-300 inline-block font-medium" %>
+      <%# link_to "See Your Profile", user_path(current_user), class: "mt-2 rounded-lg py-2 px-3 bg-gray-300 inline-block font-medium" %>
+      <%# link_to "Edit", edit_user_registration_path(@user), class: "mt-2 rounded-lg py-2 px-5 bg-teal-300 inline-block font-medium" %>
     </div>
   </div>
   <% if user_signed_in? and !current_user.has_role? :admin %>
@@ -38,7 +38,6 @@
           <th>Last Name </th>
           <th>E-mail </th>
           <th>Gender </th>
-          
           <th>Show</th>
           <th>Modify</th>
           <th>Status</th>
